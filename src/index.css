@@ -1,0 +1,50 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+body,
+html {
+  overflow-x: hidden;
+}
+
+.btn-primary {
+  @apply bg-primary text-white rounded-md text-sm sm:text-lg font-semibold transition-all duration-200 px-3 py-1 lg:px-6 lg:py-2;
+}
+.btn-sm-primary {
+  @apply bg-primaryHover rounded-md py-1 px-2 cursor-pointer text-light;
+}
+.btn-sm-danger {
+  @apply bg-red-700 rounded-md py-1 px-2 cursor-pointer text-light;
+}
+.btn-primary:hover {
+  @apply bg-primary;
+}
+.btn-danger {
+  @apply bg-red-700 text-white rounded-md text-sm sm:text-lg font-semibold transition-all duration-200 px-3 py-1 lg:px-6 lg:py-2;
+}
+.btn-danger:hover {
+  @apply bg-red-900;
+}
+.ReactModal__Content {
+  width: 40%;
+  height: 400px;
+  margin: 0 auto;
+}
+@media (max-width: 767px) {
+  .ReactModal__Content {
+    width: auto;
+    height: auto;
+  }
+}
+
+/*  */
+.overlaySidebar {
+  @apply fixed w-full h-full bg-[#7d7d7d80];
+  transition: all ease-in-out 1s;
+}
+.asd {
+  right: -70%;
+  transition: all ease-in-out 1s;
+}
+.visiblenav {
+  right: 5%;
+}
