@@ -28,7 +28,7 @@ export default function CreateSection({ activeSection, setActiveSection }) {
         type='text'
         value={sectionName}
         onChange={(e) => setSectionName(e.target.value)}
-        className='border-b-2 border-gray-500 focus:border-gray-900 outline-none'
+        className='border-b-2 border-gray-500 focus:border-neutral outline-none'
         placeholder='Enter name  section'
       />
       <button type='submit' className='text-dark'>

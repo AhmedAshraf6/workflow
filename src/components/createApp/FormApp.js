@@ -64,7 +64,7 @@ export default function FormApp() {
         />
         <button
           type='submit'
-          className='group relative flex w-full justify-center rounded-md bg-primary px-3 py-2 text-base sm:text-lg font-semibold text-light hover:bg-primaryHover focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary transition-all duration-200 '
+          className='btn btn-primary'
           // disabled={isLoading}
         >
           {/* {isLoading ? 'loading...' : 'Submit'} */}

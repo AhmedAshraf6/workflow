@@ -1,11 +1,5 @@
-import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
-import {
-  setEditGroup,
-  setEditMember,
-  toggleGroubModal,
-  toogleUserModal,
-} from '../../features/modals/modalSlice';
+import { setEditGroup } from '../../features/modals/modalSlice';
 import { Link } from 'react-router-dom';
 
 export default function TableGroups({ data: groups }) {
@@ -67,7 +61,8 @@ export default function TableGroups({ data: groups }) {
                       <span
                         className='text-indigo-600 hover:text-indigo-900 cursor-pointer'
                         onClick={() => {
-                          dispatch(toggleGroubModal());
+                          document.getElementById('group_modal').showModal();
+
                           dispatch(
                             setEditGroup({
                               groupId: group.id,

@@ -5,16 +5,12 @@ const initialState = {
   appProcessId: '',
   Name: '',
   Description: '',
-  isAppModalOpen: false,
 };
 
 const FormAppSlice = createSlice({
   name: 'formApp',
   initialState,
   reducers: {
-    toggleAppModal: (state) => {
-      state.isAppModalOpen = !state.isAppModalOpen;
-    },
     handleChangeApp: (state, { payload: { name, value } }) => {
       state[name] = value;
     },
@@ -26,7 +22,6 @@ const FormAppSlice = createSlice({
     },
   },
 });
-export const { toggleAppModal, handleChangeApp, clearValues } =
-  FormAppSlice.actions;
+export const { handleChangeApp, clearValues } = FormAppSlice.actions;
 
 export default FormAppSlice.reducer;

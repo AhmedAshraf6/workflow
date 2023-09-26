@@ -21,7 +21,7 @@ export default function FormFields({ inputData }) {
                     {...provided.draggableProps}
                     ref={provided.innerRef}
                   >
-                    <div className='flex justify-between items-center my-4 bg-gray-500 rounded-md p-2 text-light'>
+                    <div className='flex justify-between items-center my-4 bg-gray-500 rounded-md p-2 text-white'>
                       <span className='text-light'>{inp.name}</span>
                       {/* {inp.icon} */}
                     </div>

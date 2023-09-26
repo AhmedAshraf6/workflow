@@ -35,7 +35,7 @@ const SharedLayout = () => {
           <div className='px-4 sm:px-8 py-4'>
             <Navbar />
           </div>
-          <div className='px-2 sm:px-4 lg:px-10 py-2 sm:py-4 lg:py-6 bg-bgLight min-h-screen '>
+          <div className='px-2 sm:px-4 lg:px-10 py-2 sm:py-4 lg:py-6 bg-[#f0f4f8] min-h-screen '>
             <Outlet />
           </div>
         </div>

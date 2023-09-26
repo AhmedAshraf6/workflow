@@ -4,10 +4,10 @@ export default function CreateSteps() {
   return (
     <div className='flex flex-col items-center'>
       <div className='rounded-full bg-white w-[30px] h-[30px] flex justify-center items-center'>
-        <div className='w-[20px] h-[20px] border-2 border-slate-800  rounded-full'></div>
+        <div className='w-[20px] h-[20px] border-2 border-neutral   rounded-full'></div>
       </div>
 
-      <div className='bg-slate-800 mt-40 w-[300px] rounded-md text-white relative py-5'>
+      <div className='bg-neutral mt-40 w-[300px] rounded-md text-neutral-content relative py-5'>
         <div className='absolute bottom-[165px] left-[50%] bg-gray-300 w-[2px] h-[100px]'></div>
         <div className='px-4 text-lg'>
           <h2>Who can start this app?</h2>
@@ -18,7 +18,7 @@ export default function CreateSteps() {
       </div>
       <AddStepType />
       <div className='rounded-full bg-white w-[30px] h-[30px] flex justify-center items-center'>
-        <div className='w-[20px] h-[20px] border-2 bg-slate-800  rounded-full'></div>
+        <div className='w-[20px] h-[20px] border-2 bg-neutral   rounded-full'></div>
       </div>
     </div>
   );

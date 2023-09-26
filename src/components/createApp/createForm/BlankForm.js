@@ -90,7 +90,7 @@ function SectionList({ name, fields, id, index: indexParent }) {
                     editSectionName({ indexParent, val: e.target.value })
                   )
                 }
-                className=' outline-none text-primary text-lg font-bold min-w-[50px]'
+                className=' outline-none  text-primary text-lg font-bold min-w-[50px] bg-transparent'
                 placeholder='Enter name  section'
               />
             )}

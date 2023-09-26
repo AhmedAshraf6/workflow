@@ -2,25 +2,22 @@ import React, { useState } from 'react';
 import { FaAlignLeft, FaUserCircle, FaCaretDown } from 'react-icons/fa';
 import Logo from './Logo';
 import { useDispatch, useSelector } from 'react-redux';
-import {
-  clearStore,
-  logoutUser,
-  toggleSidebar,
-} from '../../features/user/userSlice';
+import { clearStore, toggleSidebar } from '../../features/user/userSlice';
 import { Link, NavLink } from 'react-router-dom';
 import { navbarLinks } from '../../utils/links';
 const Navbar = () => {
   const { user } = useSelector((store) => store.user);
   const [clicked, setClicked] = useState(false);
   const dispatch = useDispatch();
-  const toggle = () => {
-    dispatch(toggleSidebar());
-  };
   return (
     <nav className='flex justify-between items-center transition-all duration-1000'>
       <FaAlignLeft
-        onClick={toggle}
-        className='text-primary cursor-pointer text-lg sm:text-2xl'
+        onClick={() => document.getElementById('navbar_modal').showModal()}
+        className='text-primary cursor-pointer text-lg sm:text-2xl block lg:hidden'
+      />
+      <FaAlignLeft
+        onClick={() => dispatch(toggleSidebar())}
+        className='text-primary cursor-pointer text-lg sm:text-2xl hidden lg:block'
       />
       <div className='visible lg:hidden'>
         <Link to='/'>
@@ -42,7 +39,6 @@ const Navbar = () => {
                       : 'text-dark flex items-center gap-x-2 text-base py-3';
                   }}
                   key={id}
-                  onClick={toggleSidebar}
                 >
                   {text}
                 </NavLink>
@@ -55,7 +51,7 @@ const Navbar = () => {
       )}
       <div className='relative'>
         <div
-          className='flex items-center bg-primary hover:bg-primaryHover text-white transition duration-200 text-sm sm:text-lg rounded-md py-1 px-2 sm:px-3 gap-2 cursor-pointer'
+          className='flex items-center bg-primary hover:bg-primaryHover text-primary-content transition duration-200 text-sm sm:text-lg rounded-md py-1 px-2 sm:px-3 gap-2 cursor-pointer'
           onClick={() => setClicked((prev) => !prev)}
         >
           <FaUserCircle />

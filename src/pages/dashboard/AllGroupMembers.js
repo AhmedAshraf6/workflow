@@ -5,10 +5,6 @@ import customFetch, { checkForUnauthorizedResponse } from '../../utils/axios';
 import { useDispatch } from 'react-redux';
 import Loading from '../../components/SharedComponents/Loading';
 import TableGroupMembers from '../../components/allGroups/TableGroupMembers';
-import {
-  toggleGroubModal,
-  toogleUserModal,
-} from '../../features/modals/modalSlice';
 
 export default function AllGroupMembers() {
   const { groupId } = useParams();
@@ -34,8 +30,8 @@ export default function AllGroupMembers() {
             No Members Yet
           </h3>
           <button
-            className='btn-primary hover:bg-primaryHover'
-            onClick={() => dispatch(toggleGroubModal())}
+            className='btn btn-primary'
+            onClick={() => document.getElementById('group_modal').showModal()}
           >
             Add Member
           </button>
@@ -51,7 +47,7 @@ export default function AllGroupMembers() {
         </h1>
         <button
           className='btn-primary hover:bg-primaryHover'
-          onClick={() => dispatch(toggleGroubModal())}
+          onClick={() => document.getElementById('group_modal').showModal()}
         >
           Add Member
         </button>

@@ -1,13 +1,8 @@
 import React from 'react';
 import Table from '../../components/SharedComponents/Table';
-import { useDispatch } from 'react-redux';
-import { toogleUserModal } from '../../features/modals/modalSlice';
-import { useQuery } from '@tanstack/react-query';
-import customFetch, { checkForUnauthorizedResponse } from '../../utils/axios';
 import Loading from '../../components/SharedComponents/Loading';
 import { useFetchUsers } from '../../utils/reactQueryCustomHooks';
 export default function Allusers() {
-  const dispatch = useDispatch();
   const { data, isLoading } = useFetchUsers();
   if (isLoading) {
     return <Loading />;
@@ -20,8 +15,8 @@ export default function Allusers() {
           All users
         </h1>
         <button
-          className='btn-primary hover:bg-primaryHover'
-          onClick={() => dispatch(toogleUserModal())}
+          className='btn btn-primary'
+          onClick={() => document.getElementById('user_modal').showModal()}
         >
           Create User
         </button>

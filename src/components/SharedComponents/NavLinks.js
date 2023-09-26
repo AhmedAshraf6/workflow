@@ -2,7 +2,7 @@ import { NavLink } from 'react-router-dom';
 import { currentLinks, requestLinks, userLinks } from '../../utils/links';
 import { useSelector } from 'react-redux';
 
-const NavLinks = ({ toggleSidebar }) => {
+const NavLinks = () => {
   const { user } = useSelector((store) => store.user);
 
   return (
@@ -20,7 +20,6 @@ const NavLinks = ({ toggleSidebar }) => {
                   : 'text-dark flex items-center gap-x-2 text-base py-3';
               }}
               key={id}
-              onClick={toggleSidebar}
             >
               <span className='text-lg'>{icon}</span>
               {text}
@@ -41,7 +40,6 @@ const NavLinks = ({ toggleSidebar }) => {
                   : 'text-dark flex items-center gap-x-2 text-base py-3';
               }}
               key={id}
-              onClick={toggleSidebar}
             >
               <span className='text-lg'>{icon}</span>
               {text}
@@ -64,7 +62,6 @@ const NavLinks = ({ toggleSidebar }) => {
                       : 'text-dark flex items-center gap-x-2 text-base py-3';
                   }}
                   key={id}
-                  onClick={toggleSidebar}
                 >
                   <span className='text-lg'>{icon}</span>
                   {text}

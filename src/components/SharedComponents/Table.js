@@ -80,7 +80,7 @@ export default function Table({ data: users }) {
                       <span
                         className='text-indigo-600 hover:text-indigo-900 cursor-pointer'
                         onClick={() => {
-                          dispatch(toogleUserModal());
+                          document.getElementById('user_modal').showModal();
                           dispatch(
                             setEditMember({
                               editUserId: user.id,

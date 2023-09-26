@@ -32,8 +32,8 @@ export default function AllGroups() {
           All Groups
         </h1>
         <button
-          className='btn-primary hover:bg-primaryHover'
-          onClick={() => dispatch(toggleGroubModal())}
+          className='btn btn-primary'
+          onClick={() => document.getElementById('group_modal').showModal()}
         >
           Create Group
         </button>

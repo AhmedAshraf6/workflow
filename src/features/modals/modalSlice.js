@@ -1,6 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
 const initialState = {
-  isUserModalOpen: false,
   firstName: '',
   lastName: '',
   email: '',
@@ -44,25 +43,13 @@ const modalSlice = createSlice({
     setEditMember: (state, { payload }) => {
       return { ...state, isEdittingMember: true, ...payload };
     },
-    toogleUserModal: (state) => {
-      state.isUserModalOpen = !state.isUserModalOpen;
-    },
-    // groups
-    toggleGroubModal: (state) => {
-      state.isGroubModalOpen = !state.isUserModalOpen;
-    },
+
     setEditGroup: (state, { payload }) => {
       return { ...state, isEditGroub: true, ...payload };
     },
   },
 });
-export const {
-  handleChangeMember,
-  toogleUserModal,
-  setEditMember,
-  clearValues,
-  toggleGroubModal,
-  setEditGroup,
-} = modalSlice.actions;
+export const { handleChangeMember, setEditMember, clearValues, setEditGroup } =
+  modalSlice.actions;
 
 export default modalSlice.reducer;

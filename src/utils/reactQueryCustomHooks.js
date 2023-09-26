@@ -1,7 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import customFetch, { checkForUnauthorizedResponse } from './axios';
 import { useDispatch } from 'react-redux';
-import { clearValues, toggleGroubModal } from '../features/modals/modalSlice';
+import { clearValues } from '../features/modals/modalSlice';
 import { toast } from 'react-toastify';
 
 // Fetch Users
@@ -37,7 +37,6 @@ export const useCreateGroup = () => {
     onSuccess: () => {
       toast.success('Group Added Successfully...');
       queryClient.invalidateQueries({ queryKey: ['AllGroups'] });
-      dispatch(toggleGroubModal());
       dispatch(clearValues());
     },
     onError: (error) => {
@@ -59,7 +58,6 @@ export const useEditGroup = () => {
     onSuccess: () => {
       toast.success('Group Editted Successfully...');
       queryClient.invalidateQueries({ queryKey: ['AllGroups'] });
-      dispatch(toggleGroubModal());
       dispatch(clearValues());
     },
     onError: (error) => {

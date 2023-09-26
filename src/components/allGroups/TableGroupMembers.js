@@ -1,9 +1,4 @@
-import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
-import {
-  setEditMember,
-  toogleUserModal,
-} from '../../features/modals/modalSlice';
 
 export default function TableGroupMembers({
   data: { id, name, description, users },
