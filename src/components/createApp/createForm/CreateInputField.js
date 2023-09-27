@@ -16,11 +16,7 @@ import {
   typesInputField,
   useFetchInputsTypesField,
 } from '../../../utils/reactQueryCustomHooks';
-export default function CreateInputField({
-  blankForm,
-  setBlankForm,
-  setActiveField,
-}) {
+export default function CreateInputField({ setActiveField }) {
   const { sections, fieldName, fieldTypeId, isRequired } = useSelector(
     (store) => store.formbuilder
   );
@@ -46,7 +42,13 @@ export default function CreateInputField({
         dispatch(
           addInputToExtraFields({
             index: index,
-            extrafield: { id: uuidv4(), fieldName, fieldTypeId, isRequired },
+            extrafield: {
+              id: uuidv4(),
+              fieldName,
+              fieldTypeId,
+              isRequired,
+              sortOrder: Math.floor((1 + Math.random()) * 0x10000),
+            },
           })
         );
         dispatch(clearValues());

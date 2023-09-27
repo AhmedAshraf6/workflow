@@ -5,6 +5,7 @@ const initialState = {
   appProcessId: '',
   Name: '',
   Description: '',
+  stepNumber: 1,
 };
 
 const FormAppSlice = createSlice({
@@ -20,8 +21,12 @@ const FormAppSlice = createSlice({
         ...payload,
       };
     },
+    changeStepNumber: (state, { payload }) => {
+      state.stepNumber = payload;
+    },
   },
 });
-export const { handleChangeApp, clearValues } = FormAppSlice.actions;
+export const { handleChangeApp, clearValues, changeStepNumber } =
+  FormAppSlice.actions;
 
 export default FormAppSlice.reducer;

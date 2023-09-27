@@ -1,23 +1,23 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd';
 import { v4 as uuidv4 } from 'uuid';
-import { AiOutlineMail, AiOutlineUser } from 'react-icons/ai';
-import { BsFillCalendarDateFill, BsCurrencyDollar } from 'react-icons/bs';
 import BlankForm from '../../components/createApp/createForm/BlankForm';
 import FormFields from '../../components/createApp/createForm/FormFields';
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import customFetch, { checkForUnauthorizedResponse } from '../../utils/axios';
 import { useDispatch } from 'react-redux';
 import Loading from '../../components/SharedComponents/Loading';
 import { useSelector } from 'react-redux';
 import {
   addNewFormDataToSections,
-  addSectionToForm,
   editFields,
 } from '../../features/app/formBuilderSlice';
+import { toast } from 'react-toastify';
 export default function CreateForm() {
   const dispatch = useDispatch();
   const [inputData, seInputData] = useState([]);
+  const { appProcessId } = useSelector((store) => store.formapp);
+  const { sections } = useSelector((store) => store.formbuilder);
 
   const { data, isLoading } = useQuery({
     queryKey: ['inputsData'],
@@ -29,6 +29,7 @@ export default function CreateForm() {
           fieldTypeId: inp.id,
           name: inp.name,
           isRequired: 'true',
+          sortOrder: Math.floor((1 + Math.random()) * 0x10000),
         };
       });
       seInputData(tempData);
@@ -38,22 +39,23 @@ export default function CreateForm() {
       checkForUnauthorizedResponse(error, dispatch);
     },
   });
-  console.log(data);
-  const { sections } = useSelector((store) => store.formbuilder);
-  const [blankForm, setBlankForm] = useState([
-    {
-      name: 'purchase',
-      id: 'purchase order',
-      fields: [],
+
+  // Add Form Data To api
+  const { mutate: createForm, isLoading: isCreateFormLoading } = useMutation({
+    mutationFn: async (dataSend) => {
+      console.log(dataSend);
+      const { data } = await customFetch.post('/Forms', dataSend);
+      console.log(data);
+      return data;
     },
-    {
-      name: 'account',
-      id: 'account team',
-      fields: [],
+    onSuccess: () => {
+      toast.success('Form Added');
     },
-  ]);
-  // console.log(blankForm);
-  // console.log(sections);
+    onError: (error) => {
+      checkForUnauthorizedResponse(error, dispatch);
+    },
+  });
+
   const handleDragEnd = (result) => {
     const { destination, source, type } = result;
     if (!destination) {
@@ -70,7 +72,6 @@ export default function CreateForm() {
     if (destination.droppableId === 'inputData') {
       return;
     }
-    console.log(source.droppableId);
     if (source.droppableId === 'inputData') {
       let add;
       let active = inputData;
@@ -83,7 +84,6 @@ export default function CreateForm() {
         add = complete[source.index];
         complete.splice(source.index, 1);
       }
-      console.log(add);
       sections.forEach((sec, indexSec) => {
         if (sec.id === destination.droppableId) {
           dispatch(
@@ -144,15 +144,70 @@ export default function CreateForm() {
 
     dispatch(addNewFormDataToSections(newStores));
   };
+  // handle Submit
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    let tempSections = [];
+    let fields = [];
+    let tempfields = [];
+    let tempsSecFields = [];
+    sections.forEach((sec) => {
+      if (sec.id !== 'ExtraFields') {
+        tempsSecFields = sec.fields.map((field) => {
+          const { fieldTypeId, name, isRequired, sortOrder } = field;
+          return {
+            fieldTypeId,
+            name,
+            isRequired: isRequired === 'true' ? true : false,
+            sortOrder,
+          };
+        });
+        tempSections.push({ name: sec.name, fields: tempsSecFields });
+      }
+    });
+    sections.forEach((sec) => {
+      if (sec.id === 'ExtraFields') {
+        tempfields = sec.fields.map((field) => {
+          const { fieldTypeId, name, isRequired, sortOrder } = field;
+          return {
+            fieldTypeId,
+            name,
+            isRequired: isRequired === 'true' ? true : false,
+            sortOrder,
+          };
+        });
+        fields.push(...tempfields);
+      }
+    });
+    if (tempfields.length === 0 && tempsSecFields.length === 0) {
+      toast.error('Please provide one or more field');
+      return;
+    }
+    createForm({
+      applicationProcessId: appProcessId,
+      fields,
+      sections: tempSections,
+    });
+  };
   if (isLoading) {
     return <Loading />;
   }
   return (
     <DragDropContext onDragEnd={handleDragEnd}>
-      <div className='grid grid-cols-3 items-start gap-5'>
+      <div className='grid grid-cols-1 md:grid-cols-3 items-start gap-5 mt-4 sm:mt-6'>
         <FormFields inputData={inputData} />
-        <BlankForm blankForm={blankForm} setBlankForm={setBlankForm} />
+        <BlankForm />
       </div>
+      <form onSubmit={handleSubmit} className='flex justify-center'>
+        <button type='submit' className='btn btn-primary  '>
+          Next
+        </button>
+      </form>
     </DragDropContext>
   );
 }
+// tempfields = sec.fields.map((field) => {
+//   const { fieldTypeId, name, isRequired, sortOrder } = field;
+//   return { ahmed: '1' };
+// });
+// return tempfields;

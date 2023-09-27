@@ -6,15 +6,9 @@ html {
   overflow-x: hidden;
 }
 
-.ReactModal__Content {
-  width: 40%;
-  height: 400px;
-  margin: 0 auto;
-}
-@media (max-width: 767px) {
-  .ReactModal__Content {
-    width: auto;
-    height: auto;
+@layer components {
+  .align-element {
+    @apply px-2 sm:px-4 lg:px-10 py-2 sm:py-4 lg:py-6 bg-[#f0f4f8] min-h-screen;
   }
 }
 

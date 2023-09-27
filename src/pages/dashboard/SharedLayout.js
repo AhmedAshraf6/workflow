@@ -20,12 +20,12 @@ const SharedLayout = () => {
   const { isSidebarInputOpen } = useSelector((store) => store.formbuilder);
   const dispatch = useDispatch();
   return (
-    <main className='h-screen'>
+    <main className='h-screen '>
       <SmallSidebar />
       <UserModal />
       <GroupModal />
       <SidebarInput />
-      <div className='grid grid-cols-5'>
+      <div className='grid grid-cols-5 '>
         <BigSidebar />
         <div
           className={` col-span-5  ${
@@ -35,7 +35,7 @@ const SharedLayout = () => {
           <div className='px-4 sm:px-8 py-4'>
             <Navbar />
           </div>
-          <div className='px-2 sm:px-4 lg:px-10 py-2 sm:py-4 lg:py-6 bg-[#f0f4f8] min-h-screen '>
+          <div className='align-element '>
             <Outlet />
           </div>
         </div>

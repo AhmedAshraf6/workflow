@@ -1,8 +1,5 @@
 import React from 'react';
-import { FormRow } from '../../SharedComponents';
 import { Draggable, Droppable } from 'react-beautiful-dnd';
-import { icons } from 'react-icons/lib';
-import { v4 as uuidv4 } from 'uuid';
 
 export default function FormFields({ inputData }) {
   return (

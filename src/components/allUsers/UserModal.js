@@ -143,7 +143,7 @@ const UserModal = () => {
             options={roles}
             defaultValue={roleId}
             handleChange={handleChange}
-            addEmptyOption='add'
+            addEmptyOption=''
           />
           <button
             type='submit'

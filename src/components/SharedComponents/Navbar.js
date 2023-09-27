@@ -10,7 +10,7 @@ const Navbar = () => {
   const [clicked, setClicked] = useState(false);
   const dispatch = useDispatch();
   return (
-    <nav className='flex justify-between items-center transition-all duration-1000'>
+    <nav className='flex justify-between items-center transition-all duration-1000 '>
       <FaAlignLeft
         onClick={() => document.getElementById('navbar_modal').showModal()}
         className='text-primary cursor-pointer text-lg sm:text-2xl block lg:hidden'

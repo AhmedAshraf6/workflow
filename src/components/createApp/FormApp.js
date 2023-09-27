@@ -1,7 +1,11 @@
 import React from 'react';
 import { useDispatch } from 'react-redux';
 import { useSelector } from 'react-redux';
-import { clearValues, handleChangeApp } from '../../features/app/FormAppSlice';
+import {
+  changeStepNumber,
+  clearValues,
+  handleChangeApp,
+} from '../../features/app/FormAppSlice';
 import { useMutation } from '@tanstack/react-query';
 import customFetch, { checkForUnauthorizedResponse } from '../../utils/axios';
 import { toast } from 'react-toastify';
@@ -21,7 +25,7 @@ export default function FormApp() {
     },
     onSuccess: (data) => {
       dispatch(clearValues({ appProcessId: data?.id }));
-      navigate('addform');
+      dispatch(changeStepNumber(2));
     },
     onError: (error) => {
       checkForUnauthorizedResponse(error, dispatch);

@@ -11,7 +11,7 @@ import {
 import CreateSection from './CreateSection';
 import { useDispatch } from 'react-redux';
 
-export default function BlankForm({ blankForm, extraaFields }) {
+export default function BlankForm({}) {
   const [activeField, setActiveField] = useState(false);
   const [activeSection, setActiveSection] = useState(false);
   const { sections } = useSelector((store) => store.formbuilder);
@@ -42,12 +42,7 @@ export default function BlankForm({ blankForm, extraaFields }) {
       </Droppable>
       {/* Fields */}
 
-      {activeField && (
-        <CreateInputField
-          blankForm={blankForm}
-          setActiveField={setActiveField}
-        />
-      )}
+      {activeField && <CreateInputField setActiveField={setActiveField} />}
       {/* <GrAddCircle className=' w-full cursor-pointer text-2xl mt-5' /> */}
       {activeSection && (
         <CreateSection
