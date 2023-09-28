@@ -32,10 +32,6 @@ export default function GroupModal() {
   const { createGroup, isCreateGroupLoading } = useCreateGroup();
   const { editGroup, isEditGroupLoading } = useEditGroup();
 
-  const options = data?.data.map((user) => {
-    return { label: user.email, value: user.id };
-  });
-
   // Handle Change
   const handleChange = (e) => {
     const name = e.target.name;
@@ -112,7 +108,7 @@ export default function GroupModal() {
             {!isEditGroub && (
               <FormSelectPackage
                 name='userIdsInGroup'
-                options={options}
+                options={data?.userOptions}
                 handleChange={handleSelect}
               />
             )}

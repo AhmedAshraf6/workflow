@@ -15,6 +15,7 @@ import {
   setIsSidebarInputOpen,
 } from '../../features/app/formBuilderSlice';
 import { useDispatch } from 'react-redux';
+import StepModal from '../../components/createApp/CreateSteps/StepModal';
 const SharedLayout = () => {
   const { isSidebarOpen } = useSelector((store) => store.user);
   const { isSidebarInputOpen } = useSelector((store) => store.formbuilder);
@@ -25,6 +26,7 @@ const SharedLayout = () => {
       <UserModal />
       <GroupModal />
       <SidebarInput />
+      <StepModal />
       <div className='grid grid-cols-5 '>
         <BigSidebar />
         <div

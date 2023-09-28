@@ -22,7 +22,7 @@ export default function Allusers() {
         </button>
       </div>
       {/* Table */}
-      <Table data={data?.data} />
+      <Table data={data?.data?.data} />
     </div>
   );
 }

@@ -11,7 +11,10 @@ export const useFetchUsers = () => {
     queryKey: ['allUsers'],
     queryFn: async () => {
       const data = await customFetch.get('/Users');
-      return data;
+      const userOptions = data?.data.map((user) => {
+        return { label: user.email, value: user.id, isUserId: true };
+      });
+      return { data, userOptions };
     },
     onError: (error) => {
       checkForUnauthorizedResponse(error, dispatch);
@@ -19,8 +22,26 @@ export const useFetchUsers = () => {
   });
   return { data, isLoading };
 };
+
 /*  Group */
 // Create Group
+export const useFetchGroups = () => {
+  const dispatch = useDispatch();
+  const { data, isLoading } = useQuery({
+    queryKey: ['AllGroups'],
+    queryFn: async () => {
+      const data = await customFetch.get('/Groups');
+      const groupOptions = data?.data.map((group) => {
+        return { label: group.name, value: group.id };
+      });
+      return { data, groupOptions };
+    },
+    onError: (error) => {
+      checkForUnauthorizedResponse(error, dispatch);
+    },
+  });
+  return { data, isLoading };
+};
 export const useCreateGroup = () => {
   const queryClient = useQueryClient();
 
@@ -66,6 +87,7 @@ export const useEditGroup = () => {
   });
   return { editGroup, isEditGroupLoading };
 };
+// Group//
 
 // FormBuilderSLice =>>>> getTypesInputFields
 export const useFetchInputsTypesField = () => {
@@ -82,3 +104,5 @@ export const useFetchInputsTypesField = () => {
 
   return { options };
 };
+
+// fetch users and groups

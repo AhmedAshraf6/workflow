@@ -2,11 +2,9 @@ import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
   workflowLevels: [],
-  
   stepId: '',
-  stepName:'',
-  usersInStep:[],
-  isStepModalOpen: false,
+  stepName: '',
+  usersInStep: [],
   defaultStep: {
     sortOrder: 1,
     steps: [
@@ -15,9 +13,13 @@ const initialState = {
         description: 'This step is to take the input from the User.',
         stepTypeId: 2,
         sortOrder: 1,
+        stepUserPermissions: [],
       },
     ],
   },
+  renderedDefaultUserPermisions: [],
+  moreStep: [],
+  addForm: [],
 };
 
 const StepsSlice = createSlice({
@@ -27,12 +29,41 @@ const StepsSlice = createSlice({
     editStepId: (state, { payload }) => {
       state.stepId = payload;
     },
-    toggleStepModal: (state) => {
-      state.openStepModal = !state.openStepModal;
+    handleSelect: (state, { payload: { name, value, renderedPermisions } }) => {
+      state.defaultStep.steps[0][name] = value;
+      state.renderedDefaultUserPermisions = renderedPermisions;
+    },
+    removeDfaultUserPermisions: (state) => {
+      state.defaultStep.steps[0].stepUserPermissions = [];
+      state.renderedDefaultUserPermisions = [];
+    },
+    handleMoreStep: (
+      state,
+      { payload: { name, value, index, stepTypeId } }
+    ) => {
+      state.moreStep[index] = {
+        ...state.moreStep[index],
+        [name]: value,
+        stepTypeId,
+      };
+    },
+    handleAddForm: (state) => {
+      state.addForm.push('a');
+    },
+    deleteMoreStep: (state, { payload }) => {
+      state.moreStep.splice(payload, 1);
+      state.addForm.splice(payload, 1);
     },
   },
 });
-export const { toggleAppModal, editStepId, toggleStepModal } =
-  StepsSlice.actions;
+export const {
+  toggleAppModal,
+  editStepId,
+  handleMoreStep,
+  deleteMoreStep,
+  handleAddForm,
+  handleSelect,
+  removeDfaultUserPermisions,
+} = StepsSlice.actions;
 
 export default StepsSlice.reducer;

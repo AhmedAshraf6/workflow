@@ -13,7 +13,7 @@ export default function AddStepType() {
   const [active, setActive] = useState(false);
   const dispatch = useDispatch();
   const { data } = useQuery({
-    queryFn: 'stepType',
+    queryFn: ['stepType'],
     queryFn: async () => {
       return await customFetch('/StepTypes');
     },
@@ -29,8 +29,12 @@ export default function AddStepType() {
       {active && (
         // for edit one
         <button
-          className='absolute rounded-full bg-white w-[30px] h-[30px] flex justify-center items-center bottom-10 left-10'
-          onClick={() => dispatch(editStepId(data?.data[0].id))}
+          className='absolute rounded-full bg-white w-[30px] h-[30px] flex justify-center items-center bottom-10 left-10 tooltip'
+          onClick={() => {
+            dispatch(editStepId(data?.data[0].id));
+            document.getElementById('step_modal').showModal();
+          }}
+          data-tip='add input step'
         >
           <MdModeEditOutline className='text-slate-800 text-xl' />
         </button>
@@ -38,8 +42,12 @@ export default function AddStepType() {
       {active && (
         // for approve one
         <button
-          className='absolute rounded-full bg-white w-[30px] h-[30px] flex justify-center items-center bottom-10 right-10'
-          onClick={() => dispatch(editStepId(data?.data[1].id))}
+          className='absolute rounded-full bg-white w-[30px] h-[30px] flex justify-center items-center bottom-10 right-10 tooltip'
+          onClick={() => {
+            dispatch(editStepId(data?.data[1].id));
+            document.getElementById('step_modal').showModal();
+          }}
+          data-tip='add approval step'
         >
           <FiCheck className='text-slate-800 text-2xl' />
         </button>

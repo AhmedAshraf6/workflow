@@ -9,18 +9,11 @@ import { useQuery } from '@tanstack/react-query';
 import customFetch, { checkForUnauthorizedResponse } from '../../utils/axios';
 import Loading from '../../components/SharedComponents/Loading';
 import TableGroups from '../../components/allGroups/TableGroups';
+import { useFetchGroups } from '../../utils/reactQueryCustomHooks';
 export default function AllGroups() {
   const dispatch = useDispatch();
-  const { data, isLoading } = useQuery({
-    queryKey: ['AllGroups'],
-    queryFn: async () => {
-      const data = await customFetch.get('/Groups');
-      return data;
-    },
-    onError: (error) => {
-      checkForUnauthorizedResponse(error, dispatch);
-    },
-  });
+  const { data, isLoading } = useFetchGroups();
+  console.log(data);
   if (isLoading) {
     return <Loading />;
   }
@@ -39,7 +32,7 @@ export default function AllGroups() {
         </button>
       </div>
       {/* Table */}
-      <TableGroups data={data?.data} />
+      <TableGroups data={data?.data?.data} />
     </div>
   );
 }
