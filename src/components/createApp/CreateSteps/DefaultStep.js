@@ -84,20 +84,31 @@ const DefaultStep = () => {
         ) : (
           <h3 className='mt-5'>Specifc Users can start</h3>
         )}
-        {active && checked === '2' && (
-          <FormSelectPackage
-            value={renderedDefaultUserPermisions}
-            name='userIdsInGroup'
-            options={
-              users?.userOptions &&
-              groups?.groupOptions && [
-                ...users?.userOptions,
-                ...groups?.groupOptions,
-              ]
-            }
-            handleChange={handleSelectPack}
-          />
+        {active && checked === '2' ? (
+          usersIsLoading || groupsIsLoading ? (
+            <div className='text-center'>
+              <span className='loading loading-spinner loading-xs  '></span>
+            </div>
+          ) : (
+            <FormSelectPackage
+              value={renderedDefaultUserPermisions}
+              name='userIdsInGroup'
+              options={
+                users?.userOptions &&
+                groups?.groupOptions && [
+                  ...users?.userOptions,
+                  ...groups?.groupOptions,
+                ]
+              }
+              handleChange={handleSelectPack}
+            />
+          )
+        ) : (
+          ''
         )}
+
+        {/* {active && checked === '2' && (
+        )} */}
         <h4 className='mt-4'></h4>
       </div>
 
