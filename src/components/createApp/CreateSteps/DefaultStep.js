@@ -88,7 +88,13 @@ const DefaultStep = () => {
           <FormSelectPackage
             value={renderedDefaultUserPermisions}
             name='userIdsInGroup'
-            options={[...users?.userOptions, ...groups?.groupOptions]}
+            options={
+              users?.userOptions &&
+              groups?.groupOptions && [
+                ...users?.userOptions,
+                ...groups?.groupOptions,
+              ]
+            }
             handleChange={handleSelectPack}
           />
         )}
