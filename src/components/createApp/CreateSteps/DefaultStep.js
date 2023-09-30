@@ -29,7 +29,11 @@ const DefaultStep = () => {
   // Handle Select of select package
   const handleSelectPack = (choice) => {
     const tempChoice = choice.map((ch) => {
-      return { userId: ch.value };
+      if (ch.isUserId) {
+        return { userId: ch.value };
+      } else {
+        return { groupId: ch.value };
+      }
     });
     console.log(tempChoice);
     dispatch(
@@ -41,8 +45,8 @@ const DefaultStep = () => {
     );
   };
   return (
-    <div className='bg-neutral mt-40 w-[300px] rounded-md text-neutral-content relative py-5'>
-      <div className='absolute bottom-[165px] left-[50%] bg-gray-300 w-[2px] h-[100px]'></div>
+    <div className='bg-neutral mt-40 w-[300px] rounded-md text-neutral-content  py-5'>
+      {/* <div className='absolute bottom-[165px] left-[50%] bg-gray-300 w-[2px] h-[100px]'></div> */}
       <div className='px-4 text-lg'>
         <h2>Who can start this app?</h2>
         {active ? (
@@ -92,7 +96,6 @@ const DefaultStep = () => {
           ) : (
             <FormSelectPackage
               value={renderedDefaultUserPermisions}
-              name='userIdsInGroup'
               options={
                 users?.userOptions &&
                 groups?.groupOptions && [

@@ -3,6 +3,7 @@ import FormApp from '../../components/createApp/FormApp';
 import CreateForm from './CreateForm';
 import CreateSteps from './CreateSteps';
 import { useSelector } from 'react-redux';
+import CreatePermisions from './CreatePermisions';
 export default function CreateApp() {
   const { stepNumber } = useSelector((store) => store.formapp);
 
@@ -26,8 +27,10 @@ export default function CreateApp() {
         <FormApp />
       ) : stepNumber === 2 ? (
         <CreateForm />
+      ) : stepNumber === 3 ? (
+        <CreateSteps />
       ) : (
-        stepNumber === 3 && <CreateSteps />
+        stepNumber === 4 && <CreatePermisions />
       )}
     </>
   );

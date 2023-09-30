@@ -13,6 +13,7 @@ import {
   editFields,
 } from '../../features/app/formBuilderSlice';
 import { toast } from 'react-toastify';
+import { changeStepNumber } from '../../features/app/FormAppSlice';
 export default function CreateForm() {
   const dispatch = useDispatch();
   const [inputData, seInputData] = useState([]);
@@ -49,7 +50,7 @@ export default function CreateForm() {
       return data;
     },
     onSuccess: () => {
-      toast.success('Form Added');
+      dispatch(changeStepNumber(3));
     },
     onError: (error) => {
       checkForUnauthorizedResponse(error, dispatch);
@@ -189,7 +190,7 @@ export default function CreateForm() {
       sections: tempSections,
     });
   };
-  if (isLoading) {
+  if (isCreateFormLoading || isLoading) {
     return <Loading />;
   }
   return (

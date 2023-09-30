@@ -106,3 +106,15 @@ export const useFetchInputsTypesField = () => {
 };
 
 // fetch users and groups
+
+// fetch Step Type id
+
+export const useFetchStepTypes = () => {
+  const { data, isLoading } = useQuery({
+    queryFn: ['stepType'],
+    queryFn: async () => {
+      return await customFetch('/StepTypes');
+    },
+  });
+  return { data, isLoading };
+};

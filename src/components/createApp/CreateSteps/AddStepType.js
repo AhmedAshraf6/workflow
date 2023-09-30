@@ -7,18 +7,13 @@ import { MdModeEditOutline } from 'react-icons/md';
 import { FiCheck } from 'react-icons/fi';
 import customFetch from '../../../utils/axios';
 import { useDispatch } from 'react-redux';
-import { editStepId } from '../../../features/app/StepsSlice';
+import { editStepId, handleChange } from '../../../features/app/StepsSlice';
+import { useFetchStepTypes } from '../../../utils/reactQueryCustomHooks';
 
 export default function AddStepType() {
   const [active, setActive] = useState(false);
   const dispatch = useDispatch();
-  const { data } = useQuery({
-    queryFn: ['stepType'],
-    queryFn: async () => {
-      return await customFetch('/StepTypes');
-    },
-  });
-
+  const { data, isLoading } = useFetchStepTypes();
   return (
     <div
       className={`relative rounded-full ${
@@ -29,14 +24,24 @@ export default function AddStepType() {
       {active && (
         // for edit one
         <button
-          className='absolute rounded-full bg-white w-[30px] h-[30px] flex justify-center items-center bottom-10 left-10 tooltip'
+          className='absolute rounded-full bg-white w-[30px] h-[30px] flex justify-center items-center bottom-10 left-10 tooltip '
           onClick={() => {
-            dispatch(editStepId(data?.data[0].id));
+            dispatch(
+              handleChange({ name: 'stepTypeId', value: data?.data[0].id })
+            );
             document.getElementById('step_modal').showModal();
+            setActive(!active);
           }}
           data-tip='add input step'
+          disabled={isLoading}
         >
-          <MdModeEditOutline className='text-slate-800 text-xl' />
+          {isLoading ? (
+            <div className='text-center'>
+              <span className='loading loading-spinner loading-xs  '></span>
+            </div>
+          ) : (
+            <MdModeEditOutline className='text-slate-800 text-xl' />
+          )}
         </button>
       )}
       {active && (
@@ -44,12 +49,23 @@ export default function AddStepType() {
         <button
           className='absolute rounded-full bg-white w-[30px] h-[30px] flex justify-center items-center bottom-10 right-10 tooltip'
           onClick={() => {
-            dispatch(editStepId(data?.data[1].id));
+            dispatch(
+              handleChange({ name: 'stepTypeId', value: data?.data[1].id })
+            );
+
             document.getElementById('step_modal').showModal();
+            setActive(!active);
           }}
           data-tip='add approval step'
+          disabled={isLoading}
         >
-          <FiCheck className='text-slate-800 text-2xl' />
+          {isLoading ? (
+            <div className='text-center'>
+              <span className='loading loading-spinner loading-xs  '></span>
+            </div>
+          ) : (
+            <FiCheck className='text-slate-800 text-2xl' />
+          )}
         </button>
       )}
       {active ? (

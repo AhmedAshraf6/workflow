@@ -12,40 +12,149 @@ import { FormRow } from '../../SharedComponents';
 import { useQuery } from '@tanstack/react-query';
 import customFetch from '../../../utils/axios';
 import {
+  addStepToWorkflowLevels,
+  clearValues,
   deleteMoreStep,
   handleAddForm,
+  handleChange,
   handleMoreStep,
 } from '../../../features/app/StepsSlice';
+import {
+  useFetchGroups,
+  useFetchStepTypes,
+  useFetchUsers,
+} from '../../../utils/reactQueryCustomHooks';
+import FormSelectPackage from '../../SharedComponents/FormSelectPackage';
 
 export default function StepModal() {
   const dispatch = useDispatch();
-  const { addForm } = useSelector((store) => store.steps);
+  // quiers
+  const { data: users, isLoading: usersIsLoading } = useFetchUsers();
+  const { data: groups, isLoading: groupsIsLoading } = useFetchGroups();
+  const { data, isLoading: stepIsLoading } = useFetchStepTypes();
+  const {
+    addForm,
+    moreStep,
+    name,
+    description,
+    stepUserPermissions,
+    stepTypeId,
+    sortOrder,
+    workflowLevels,
+  } = useSelector((store) => store.steps);
   const [active, setActive] = useState(false);
-  const [stepTypeId, setStepTypeId] = useState('');
-  const { data } = useQuery({
-    queryFn: ['stepType'],
-    queryFn: async () => {
-      return await customFetch('/StepTypes');
-    },
-  });
-
-  // Handle Change
-  // const handleChange = (e) => {
-  //   const name = e.target.name;
-  //   const value = e.target.value;
-
-  //   // dispatch(handleChangeApp({ name, value }));
-  // };
+  const [stepTypeIdState, setStepTypeIdState] = useState('');
 
   // Handle Submit
   const onSubmit = (e) => {
     e.preventDefault();
+    if (
+      !name ||
+      !description ||
+      !stepUserPermissions ||
+      stepUserPermissions.stepUserPermissions.length === 0
+    ) {
+      toast.error('Please fill all fields');
+      return;
+    }
+    if (moreStep.length > 0) {
+      moreStep.map((step) => {
+        const { name, description, stepUserPermissions } = step;
+        if (
+          !name ||
+          !description ||
+          !stepUserPermissions ||
+          stepUserPermissions.stepUserPermissions.length === 0
+        ) {
+          toast.error('Please fill all fields');
+          return;
+        }
+      });
+    }
+    let tempMoreStep = moreStep.map((step) => {
+      const { name, description, stepTypeId, sortOrder, stepUserPermissions } =
+        step;
+      return {
+        name,
+        description,
+        stepTypeId,
+        sortOrder,
+        stepUserPermissions,
+        // remove rendered users or groups
+        // stepUserPermissions: stepUserPermissions?.stepUserPermissions,
+      };
+    });
+    console.log(tempMoreStep);
+    let step = {
+      sortOrder:
+        workflowLevels.length > 0
+          ? workflowLevels[workflowLevels.length - 1].sortOrder + 1
+          : 2,
+      steps: [
+        {
+          name,
+          description,
+          stepTypeId,
+          sortOrder,
+          stepUserPermissions: stepUserPermissions,
+        },
+        ...tempMoreStep,
+      ],
+    };
+    dispatch(addStepToWorkflowLevels(step));
+    dispatch(clearValues());
+    document.getElementById('step_modal').close();
     // editApp({ nameOfGroup, descGroup, userIdsInGroup });
+  };
+  const handleSelectPack = (choice, index, stepTypeIdState) => {
+    const tempChoice = choice.map((ch) => {
+      if (ch.isUserId) {
+        return { userId: ch.value };
+      } else {
+        return { groupId: ch.value };
+      }
+    });
+    //  console.log(tempChoice);
+    dispatch(
+      handleMoreStep({
+        name: 'stepUserPermissions',
+        value: {
+          stepUserPermissions: tempChoice,
+          renderedUserPermisions: choice,
+        },
+        stepTypeIdState,
+        index,
+      })
+    );
+  };
+  const handleSelect = (choice) => {
+    const tempChoice = choice.map((ch) => {
+      if (ch.isUserId) {
+        return { userId: ch.value };
+      } else {
+        return { groupId: ch.value };
+      }
+    });
+    dispatch(
+      handleChange({
+        name: 'stepUserPermissions',
+        value: {
+          stepUserPermissions: tempChoice,
+          renderedUserPermisions: choice,
+        },
+      })
+    );
+  };
+  const handleChangeMain = (e) => {
+    const name = e.target.name;
+    const value = e.target.value;
+
+    dispatch(handleChange({ name, value }));
   };
   return (
     <dialog id='step_modal' className='modal'>
       <div className='modal-box max-w-sm'>
-        <form method='dialog'>
+        <form method='dialog' onClick={() => dispatch(clearValues())}>
           {/* if there is a button in form, it will close the modal */}
           <button className='btn btn-sm btn-circle btn-ghost absolute right-2 top-2'>
             ✕
@@ -58,17 +167,35 @@ export default function StepModal() {
           <FormRow
             labelText='Enter name of the step'
             type='text'
-            name='Name'
-            // handleChange={handleChange}
+            name='name'
+            value={name}
+            handleChange={handleChangeMain}
           />
 
           <FormRow
             labelText='Enter description'
             type='text'
-            name='Description'
-            // handleChange={handleChange}
+            name='description'
+            value={description}
+            handleChange={handleChangeMain}
           />
-
+          {usersIsLoading || groupsIsLoading ? (
+            <div className='text-center'>
+              <span className='loading loading-spinner loading-xs'></span>
+            </div>
+          ) : (
+            <FormSelectPackage
+              value={stepUserPermissions?.renderedUserPermisions}
+              options={
+                users?.userOptions &&
+                groups?.groupOptions && [
+                  ...users?.userOptions,
+                  ...groups?.groupOptions,
+                ]
+              }
+              handleChange={handleSelect}
+            />
+          )}
           {addForm?.map((form, index) => {
             return (
               <div key={index} className='relative'>
@@ -80,14 +207,14 @@ export default function StepModal() {
                 <FormRow
                   labelText='Enter name of the step'
                   type='text'
-                  name='Name'
+                  name='name'
                   handleChange={(e) =>
                     dispatch(
                       handleMoreStep({
                         name: e.target.name,
                         value: e.target.value,
                         index,
-                        stepTypeId,
+                        stepTypeIdState,
                       })
                     )
                   }
@@ -95,18 +222,38 @@ export default function StepModal() {
                 <FormRow
                   labelText='Enter description'
                   type='text'
-                  name='Description'
+                  name='description'
                   handleChange={(e) =>
                     dispatch(
                       handleMoreStep({
                         name: e.target.name,
                         value: e.target.value,
                         index,
-                        stepTypeId,
+                        stepTypeIdState,
                       })
                     )
                   }
                 />
+                {usersIsLoading || groupsIsLoading ? (
+                  <div className='text-center'>
+                    <span className='loading loading-spinner loading-xs  '></span>
+                  </div>
+                ) : (
+                  <FormSelectPackage
+                    // value={renderedDefaultUserPermisions}
+
+                    options={
+                      users?.userOptions &&
+                      groups?.groupOptions && [
+                        ...users?.userOptions,
+                        ...groups?.groupOptions,
+                      ]
+                    }
+                    handleChange={(ch) =>
+                      handleSelectPack(ch, index, stepTypeIdState)
+                    }
+                  />
+                )}
               </div>
             );
           })}
@@ -131,24 +278,38 @@ export default function StepModal() {
               <button
                 className='absolute rounded-full bg-white w-[30px] h-[30px] flex justify-center items-center top-0 left-28 tooltip'
                 onClick={() => {
-                  setStepTypeId(data?.data[0].id);
+                  setStepTypeIdState(data?.data[0].id);
                   setActive(!active);
                   dispatch(handleAddForm());
                 }}
                 data-tip='add input step'
+                disabled={stepIsLoading}
               >
-                <MdModeEditOutline className='text-slate-800 text-xl' />
+                {stepIsLoading ? (
+                  <div className='text-center'>
+                    <span className='loading loading-spinner loading-xs  '></span>
+                  </div>
+                ) : (
+                  <MdModeEditOutline className='text-slate-800 text-xl' />
+                )}
               </button>
               <button
                 className='absolute rounded-full bg-white w-[30px] h-[30px] flex justify-center items-center top-0 right-28 tooltip'
                 onClick={() => {
-                  setStepTypeId(data?.data[1].id);
+                  setStepTypeIdState(data?.data[1].id);
                   setActive(!active);
                   dispatch(handleAddForm());
                 }}
                 data-tip='add approval step'
+                disabled={stepIsLoading}
               >
-                <FiCheck className='text-slate-800 text-2xl' />
+                {stepIsLoading ? (
+                  <div className='text-center'>
+                    <span className='loading loading-spinner loading-xs  '></span>
+                  </div>
+                ) : (
+                  <FiCheck className='text-slate-800 text-2xl' />
+                )}
               </button>
             </div>
           )}
