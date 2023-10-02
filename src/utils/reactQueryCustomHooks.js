@@ -3,6 +3,7 @@ import customFetch, { checkForUnauthorizedResponse } from './axios';
 import { useDispatch } from 'react-redux';
 import { clearValues } from '../features/modals/modalSlice';
 import { toast } from 'react-toastify';
+import { useSelector } from 'react-redux';
 
 // Fetch Users
 export const useFetchUsers = () => {
@@ -111,10 +112,64 @@ export const useFetchInputsTypesField = () => {
 
 export const useFetchStepTypes = () => {
   const { data, isLoading } = useQuery({
-    queryFn: ['stepType'],
+    queryKey: ['stepType'],
     queryFn: async () => {
       return await customFetch('/StepTypes');
     },
   });
   return { data, isLoading };
+};
+
+// Permissions
+export const useFetchStepsPermissions = () => {
+  const { stepsId } = useSelector((store) => store.steps);
+  const dispatch = useDispatch();
+  const { data: fetchStepsPermissions, isLoading: isLoadingStepsPermissions } =
+    useQuery({
+      queryKey: ['stepsPermissions'],
+      queryFn: async () => {
+        const data = await customFetch(`/Workflows/${stepsId}`);
+        return data;
+      },
+      onError: (error) => {
+        checkForUnauthorizedResponse(error, dispatch);
+      },
+      refetchOnWindowFocus: false,
+    });
+  return { fetchStepsPermissions, isLoadingStepsPermissions };
+};
+
+export const useFetchFormPermissions = () => {
+  const { formId } = useSelector((store) => store.formbuilder);
+  const dispatch = useDispatch();
+  const { data: fetchFormPermissions, isLoading: isLoadingFormPermissions } =
+    useQuery({
+      queryKey: ['formPermissions'],
+      queryFn: async () => {
+        const data = await customFetch(`/Forms/${formId}`);
+        return data;
+      },
+      onError: (error) => {
+        checkForUnauthorizedResponse(error, dispatch);
+      },
+      refetchOnWindowFocus: false,
+    });
+  return { fetchFormPermissions, isLoadingFormPermissions };
+};
+
+export const useFetchRolesPermissions = () => {
+  const dispatch = useDispatch();
+  const { data: fetchRolesPermissions, isLoading: isLoadingRolesPermissions } =
+    useQuery({
+      queryKey: ['rolesPermissions'],
+      queryFn: async () => {
+        const data = await customFetch('/PermissionTypes');
+        return data;
+      },
+      onError: (error) => {
+        checkForUnauthorizedResponse(error, dispatch);
+      },
+      refetchOnWindowFocus: false,
+    });
+  return { fetchRolesPermissions, isLoadingRolesPermissions };
 };

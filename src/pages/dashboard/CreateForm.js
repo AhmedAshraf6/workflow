@@ -9,6 +9,7 @@ import { useDispatch } from 'react-redux';
 import Loading from '../../components/SharedComponents/Loading';
 import { useSelector } from 'react-redux';
 import {
+  addFormId,
   addNewFormDataToSections,
   editFields,
 } from '../../features/app/formBuilderSlice';
@@ -44,13 +45,12 @@ export default function CreateForm() {
   // Add Form Data To api
   const { mutate: createForm, isLoading: isCreateFormLoading } = useMutation({
     mutationFn: async (dataSend) => {
-      console.log(dataSend);
       const { data } = await customFetch.post('/Forms', dataSend);
-      console.log(data);
       return data;
     },
-    onSuccess: () => {
+    onSuccess: (data) => {
       dispatch(changeStepNumber(3));
+      dispatch(addFormId(data?.id));
     },
     onError: (error) => {
       checkForUnauthorizedResponse(error, dispatch);

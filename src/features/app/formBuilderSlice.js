@@ -15,6 +15,7 @@ const initialState = {
   indexParent: '',
   indexChild: '',
   sortOrder: '',
+  formId: '40',
 };
 
 const FormBuilderSlice = createSlice({
@@ -93,6 +94,9 @@ const FormBuilderSlice = createSlice({
         id,
       });
     },
+    addFormId: (state, { payload }) => {
+      state.formId = payload;
+    },
   },
 });
 export const {
@@ -110,6 +114,7 @@ export const {
   closeSidebarInputOpen,
   editInputsInsideSections,
   deleteInputsInsideSections,
+  addFormId,
 } = FormBuilderSlice.actions;
 
 export default FormBuilderSlice.reducer;

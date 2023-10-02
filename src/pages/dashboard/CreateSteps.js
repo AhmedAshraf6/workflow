@@ -9,6 +9,7 @@ import customFetch, { checkForUnauthorizedResponse } from '../../utils/axios';
 import { useMutation } from '@tanstack/react-query';
 import { changeStepNumber } from '../../features/app/FormAppSlice';
 import Loading from '../../components/SharedComponents/Loading';
+import { AddStepsId } from '../../features/app/StepsSlice';
 
 export default function CreateSteps() {
   const { workflowLevels, defaultStep } = useSelector((store) => store.steps);
@@ -21,16 +22,15 @@ export default function CreateSteps() {
     isLoading: isCreateWorkFlowLoading,
   } = useMutation({
     mutationFn: async ({ appProcessId, tempWorkflowLevels }) => {
-      console.log(appProcessId);
-      console.log(tempWorkflowLevels);
       const { data } = await customFetch.post('/Workflows', {
         applicationProcessId: appProcessId,
         workflowLevels: tempWorkflowLevels,
       });
       return data;
     },
-    onSuccess: () => {
+    onSuccess: (data) => {
       dispatch(changeStepNumber(4));
+      dispatch(AddStepsId(data?.id));
     },
     onError: (error) => {
       checkForUnauthorizedResponse(error, dispatch);

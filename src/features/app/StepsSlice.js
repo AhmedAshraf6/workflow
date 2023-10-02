@@ -29,6 +29,7 @@ const initialState = {
     ],
   },
   renderedDefaultUserPermisions: [],
+  stepsId: '10',
 };
 
 const StepsSlice = createSlice({
@@ -125,6 +126,9 @@ const StepsSlice = createSlice({
       state.moreStep.splice(payload, 1);
       state.addForm.splice(payload, 1);
     },
+    AddStepsId: (state, { payload }) => {
+      state.stepsId = payload;
+    },
   },
 });
 export const {
@@ -141,6 +145,7 @@ export const {
   setEditStep,
   editStepInsideWorkflowLevels,
   deleteStepFromWorkflowLevels,
+  AddStepsId,
 } = StepsSlice.actions;
 
 export default StepsSlice.reducer;

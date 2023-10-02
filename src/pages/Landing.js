@@ -3,7 +3,7 @@ import main from '../assets/images/main.svg';
 import { Link } from 'react-router-dom';
 export default function Landing() {
   return (
-    <header className='w-full min-h-[100vh]  bg-bgLight px-10 sm:px-20 pt-5 sm:pt-10'>
+    <header className='w-full min-h-[100vh]  bg-base-100 px-10 sm:px-20 pt-5 sm:pt-10'>
       <nav className='w-full '>
         <Logo className='w-48 h-48' />
       </nav>
@@ -11,8 +11,7 @@ export default function Landing() {
       <div className='my-20 grid grid-cols-2 gap-4'>
         <div className='col-span-2 md:col-span-1 flex flex-col justify-center text-center sm:text-start'>
           <h1 className='text-2xl md:text-5xl font-bold text-dark mb-3 sm:mb-5 lg:mb-8'>
-            Workflow <span className=' text-primary-content'>Workspace</span>{' '}
-            App
+            Workflow <span className='text-primary-content'>Workspace</span> App
           </h1>
           <p className='text-lg  mb-3 sm:mb-5 lg:mb-8 lg:w-[75%]'>
             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed
@@ -20,7 +19,7 @@ export default function Landing() {
           </p>
           <Link
             to='/register'
-            className='bg-primary self-start font-semibold px-4 text-lg py-2 text-light rounded-md  transition-all duration-200 '
+            className='btn btn-primary text-primary-content self-start'
           >
             Login/Register
           </Link>

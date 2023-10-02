@@ -19,6 +19,7 @@ import {
   CreateApp,
   CreateForm,
   CreateSteps,
+  CreatePermisions,
 } from './pages/dashboard';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -49,6 +50,10 @@ export default function App() {
               <Route index element={<CreateApp />}></Route>
               <Route path='addform' element={<CreateForm />}></Route>
               <Route path='createsteps' element={<CreateSteps />}></Route>
+              <Route
+                path='addpermisions'
+                element={<CreatePermisions />}
+              ></Route>
             </Route>
           </Route>
           <Route path='manage' element={<ProtectedAdmin />}>

@@ -42,6 +42,7 @@ const Step = ({ workflow }) => {
                 className={`bg-base-100  w-[300px] rounded-md text-base-content relative py-5  ${
                   index > 0 ? 'left-12 mt-5' : 'mt-[200px]'
                 }`}
+                key={sortOrder}
               >
                 <div
                   className={`absolute bottom-[165px]  bg-gray-300 w-[2px] ${
@@ -95,7 +96,10 @@ const Step = ({ workflow }) => {
         workflow.steps.map((step) => {
           const { name, description, sortOrder, stepUserPermissions } = step;
           return (
-            <div className='bg-base-100 mt-40 w-[300px] rounded-md text-base-content relative py-5'>
+            <div
+              className='bg-base-100 mt-40 w-[300px] rounded-md text-base-content relative py-5'
+              key={sortOrder}
+            >
               <div
                 className={`absolute bottom-[165px]  bg-gray-300 w-[2px] right-[90%]`}
                 style={{ height: `${dis}px` }}

@@ -68,6 +68,7 @@ export default function GroupModal() {
       return;
     }
     createGroup({ nameOfGroup, descGroup, userIdsInGroup });
+    document.getElementById('group_modal').close();
   };
 
   return (

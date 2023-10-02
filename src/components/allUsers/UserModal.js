@@ -36,7 +36,7 @@ const UserModal = () => {
     data: dataCreateUser,
   } = useMutation({
     mutationFn: async ({ firstName, lastName, email, password, roleId }) => {
-      const { data } = await customFetch.post('/Users', {
+      const { data } = await customFetch.post('/Authentication/register', {
         firstName,
         lastName,
         email,

@@ -13,6 +13,7 @@ import SharedLayout from './SharedLayout';
 import Stats from './Stats';
 import CreateForm from './CreateForm';
 import CreateSteps from './CreateSteps';
+import CreatePermisions from './CreatePermisions';
 export {
   Profile,
   Stats,
@@ -29,4 +30,5 @@ export {
   AllGroups,
   CreateForm,
   CreateSteps,
+  CreatePermisions,
 };

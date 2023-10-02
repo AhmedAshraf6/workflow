@@ -2,15 +2,12 @@ import React, { useState } from 'react';
 import { AiOutlinePlusCircle } from 'react-icons/ai';
 import { MdModeEditOutline } from 'react-icons/md';
 import { FaTrash } from 'react-icons/fa';
-
 import { FiCheck } from 'react-icons/fi';
 import { IoClose } from 'react-icons/io5';
 import { useDispatch } from 'react-redux';
 import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import { FormRow } from '../../SharedComponents';
-import { useQuery } from '@tanstack/react-query';
-import customFetch from '../../../utils/axios';
 import {
   addStepToWorkflowLevels,
   clearValues,
@@ -84,7 +81,6 @@ export default function StepModal() {
         // stepUserPermissions: stepUserPermissions?.stepUserPermissions,
       };
     });
-    console.log(tempMoreStep);
     let step = {
       sortOrder:
         workflowLevels.length > 0
@@ -104,7 +100,6 @@ export default function StepModal() {
     dispatch(addStepToWorkflowLevels(step));
     dispatch(clearValues());
     document.getElementById('step_modal').close();
-    // editApp({ nameOfGroup, descGroup, userIdsInGroup });
   };
   const handleSelectPack = (choice, index, stepTypeIdState) => {
     const tempChoice = choice.map((ch) => {
@@ -114,7 +109,6 @@ export default function StepModal() {
         return { groupId: ch.value };
       }
     });
-    //  console.log(tempChoice);
     dispatch(
       handleMoreStep({
         name: 'stepUserPermissions',
@@ -316,9 +310,7 @@ export default function StepModal() {
           <button
             type='submit'
             className='btn btn-primary text-primary-content '
-            // disabled={isLoading}
           >
-            {/* {isLoading ? 'loading...' : 'Submit'} */}
             submit
           </button>
         </form>

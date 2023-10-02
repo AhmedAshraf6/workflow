@@ -24,8 +24,7 @@ const DefaultStep = () => {
   // const options2 = groups?.data.map((group) => {
   //   return { label: group.name, value: group.id };
   // });
-  // console.log(groups);
-  // console.log(options);
+
   // Handle Select of select package
   const handleSelectPack = (choice) => {
     const tempChoice = choice.map((ch) => {
@@ -35,7 +34,6 @@ const DefaultStep = () => {
         return { groupId: ch.value };
       }
     });
-    console.log(tempChoice);
     dispatch(
       handleSelect({
         name: 'stepUserPermissions',
