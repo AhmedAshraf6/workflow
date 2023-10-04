@@ -1,14 +1,11 @@
 import React from 'react';
-import {
-  useFetchFormPermissions,
-  useFetchRolesPermissions,
-} from '../../../utils/reactQueryCustomHooks';
+import { useFetchRolesPermissions } from '../../../utils/reactQueryCustomHooks';
 import { useSelector } from 'react-redux';
 import { changeStepPermission } from '../../../features/app/permissionsSlice';
 import { useDispatch } from 'react-redux';
 
-const FormPermissions = () => {
-  const { fetchFormPermissions } = useFetchFormPermissions();
+const FormPermissions = ({ data }) => {
+  // const { fetchFormPermissions } = useFetchFormPermissions();
   const { fetchRolesPermissions } = useFetchRolesPermissions();
   const { stepPermission, permissions, stepId } = useSelector(
     (store) => store.stepspermissions
@@ -17,11 +14,11 @@ const FormPermissions = () => {
   return (
     <div className='rounded-md bg-base-100 py-1 sm:py-3 '>
       <>
-        {fetchFormPermissions?.data?.sections?.map((section, index) => {
+        {data?.sections?.map((section, index) => {
           return (
             <div
               className={`mb-5 sm:mb-10  pb-10 ${
-                index !== fetchFormPermissions?.data?.sections?.length - 1 &&
+                index !== data?.data?.sections?.length - 1 &&
                 'border-b-2 border-gray-200'
               }`}
               key={section.id}
@@ -77,14 +74,12 @@ const FormPermissions = () => {
             </div>
           );
         })}
-        {fetchFormPermissions?.data?.fields?.map((field) => {
+        {data.data?.fields?.map((field) => {
           return (
             <div
               className={`mb-5 sm:mb-10  pb-10 
                  ${
-                   fetchFormPermissions?.data?.sections?.length > 0
-                     ? 'border-t-2'
-                     : ''
+                   data.data?.sections?.length > 0 ? 'border-t-2' : ''
                  } border-gray-200`}
               key={field.id}
             >

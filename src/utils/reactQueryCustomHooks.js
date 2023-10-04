@@ -1,9 +1,16 @@
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import {
+  useMutation,
+  useQueries,
+  useQuery,
+  useQueryClient,
+} from '@tanstack/react-query';
 import customFetch, { checkForUnauthorizedResponse } from './axios';
 import { useDispatch } from 'react-redux';
 import { clearValues } from '../features/modals/modalSlice';
 import { toast } from 'react-toastify';
 import { useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import { changeStepNumber } from '../features/app/FormAppSlice';
 
 // Fetch Users
 export const useFetchUsers = () => {
@@ -101,6 +108,7 @@ export const useFetchInputsTypesField = () => {
       });
       return options;
     },
+    refetchOnWindowFocus: false,
   });
 
   return { options };
@@ -116,46 +124,49 @@ export const useFetchStepTypes = () => {
     queryFn: async () => {
       return await customFetch('/StepTypes');
     },
+    refetchOnWindowFocus: false,
   });
   return { data, isLoading };
 };
 
 // Permissions
-export const useFetchStepsPermissions = () => {
-  const { stepsId } = useSelector((store) => store.steps);
-  const dispatch = useDispatch();
-  const { data: fetchStepsPermissions, isLoading: isLoadingStepsPermissions } =
-    useQuery({
-      queryKey: ['stepsPermissions'],
-      queryFn: async () => {
-        const data = await customFetch(`/Workflows/${stepsId}`);
-        return data;
-      },
-      onError: (error) => {
-        checkForUnauthorizedResponse(error, dispatch);
-      },
-      refetchOnWindowFocus: false,
-    });
-  return { fetchStepsPermissions, isLoadingStepsPermissions };
-};
+// export const useFetchStepsPermissions = () => {
+//   const { stepsId } = useSelector((store) => store.steps);
+//   const dispatch = useDispatch();
+//   const { data: fetchStepsPermissions, isLoading: isLoadingStepsPermissions } =
+//     useQuery({
+//       queryKey: ['stepsPermissions'],
+//       queryFn: async () => {
+//         const data = await customFetch(`/Workflows/${stepsId}`, {
+//           timeout: 1000,
+//         });
+//         return data;
+//       },
+//       onError: (error) => {
+//         checkForUnauthorizedResponse(error, dispatch);
+//       },
+//       retry: false, // Disable retries
+//     });
+//   return { fetchStepsPermissions, isLoadingStepsPermissions };
+// };
 
-export const useFetchFormPermissions = () => {
-  const { formId } = useSelector((store) => store.formbuilder);
-  const dispatch = useDispatch();
-  const { data: fetchFormPermissions, isLoading: isLoadingFormPermissions } =
-    useQuery({
-      queryKey: ['formPermissions'],
-      queryFn: async () => {
-        const data = await customFetch(`/Forms/${formId}`);
-        return data;
-      },
-      onError: (error) => {
-        checkForUnauthorizedResponse(error, dispatch);
-      },
-      refetchOnWindowFocus: false,
-    });
-  return { fetchFormPermissions, isLoadingFormPermissions };
-};
+// export const useFetchFormPermissions = () => {
+//   const { formId } = useSelector((store) => store.formbuilder);
+//   const dispatch = useDispatch();
+//   const { data: fetchFormPermissions, isLoading: isLoadingFormPermissions } =
+//     useQuery({
+//       queryKey: ['formPermissions'],
+//       queryFn: async () => {
+//         const data = await customFetch(`/Forms/${formId}`, { timeout: 2000 });
+//         return data;
+//       },
+//       onError: (error) => {
+//         checkForUnauthorizedResponse(error, dispatch);
+//       },
+//       retry: false, // Disable retries
+//     });
+//   return { fetchFormPermissions, isLoadingFormPermissions };
+// };
 
 export const useFetchRolesPermissions = () => {
   const dispatch = useDispatch();
@@ -172,4 +183,56 @@ export const useFetchRolesPermissions = () => {
       refetchOnWindowFocus: false,
     });
   return { fetchRolesPermissions, isLoadingRolesPermissions };
+};
+// export const useMultiQuery = () => {
+//   const { stepsId } = useSelector((store) => store.steps);
+//   const { formId } = useSelector((store) => store.formbuilder);
+
+//   const results = useQueries({
+//     queries: [
+//       {
+//         queryKey: ['stepsPermissions'],
+//         queryFn: async () => {
+//           const data = await customFetch(`/Workflows/${stepsId}`);
+//           return data;
+//         },
+//       },
+//       {
+//         queryKey: ['formPermissions'],
+//         queryFn: async () => {
+//           const data = await customFetch(`/Forms/${formId}`);
+//           return data;
+//         },
+//       },
+//     ],
+//   });
+//   const isLoading = results.some((query) => query.isLoading);
+//   return { results, isLoading };
+// };
+
+export const useCreatePermissions = () => {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const {
+    data,
+    mutate: createPermission,
+    isLoading: isLoadingCreatePermissions,
+  } = useMutation({
+    mutationFn: async ({ permissions, applicationProcessId }) => {
+      const { data } = await customFetch.post('/Permissions', {
+        permissions,
+        applicationProcessId,
+      });
+      return data;
+    },
+    onSuccess: () => {
+      toast.success('Permission added Successfully...');
+      dispatch(changeStepNumber(1));
+      navigate('/allapps');
+    },
+    onError: (error) => {
+      checkForUnauthorizedResponse(error, dispatch);
+    },
+  });
+  return { data, createPermission, isLoadingCreatePermissions };
 };

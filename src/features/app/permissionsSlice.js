@@ -3,12 +3,22 @@ import { createSlice } from '@reduxjs/toolkit';
 const initialState = {
   stepId: '',
   permissions: [],
+  isLoadingAction: false,
 };
 
 const permissionsSlice = createSlice({
   name: 'stepspermissions',
   initialState,
   reducers: {
+    changeStepId: (state, { payload: { stepId, stepPermission } }) => {
+      state.stepId = stepId;
+    },
+    finsihLoading: (state) => {
+      state.isLoadingAction = false;
+    },
+    startLoading: (state) => {
+      state.isLoadingAction = true;
+    },
     changeStepId: (state, { payload: { stepId, stepPermission } }) => {
       state.stepId = stepId;
     },
@@ -61,7 +71,12 @@ const permissionsSlice = createSlice({
     },
   },
 });
-export const { changeStepId, AddPermissions, changeStepPermission } =
-  permissionsSlice.actions;
+export const {
+  changeStepId,
+  AddPermissions,
+  changeStepPermission,
+  startLoading,
+  finsihLoading,
+} = permissionsSlice.actions;
 
 export default permissionsSlice.reducer;

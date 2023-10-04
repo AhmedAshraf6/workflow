@@ -4,7 +4,7 @@ import { AiOutlineCheck } from 'react-icons/ai';
 import { useDispatch } from 'react-redux';
 import { changeStepId } from '../../../features/app/permissionsSlice';
 import { useSelector } from 'react-redux';
-import { useFetchStepsPermissions } from '../../../utils/reactQueryCustomHooks';
+// import { useFetchStepsPermissions } from '../../../utils/reactQueryCustomHooks';
 import Loading from '../../SharedComponents/Loading';
 const StepsPermissions = ({ data }) => {
   const { stepId } = useSelector((store) => store.stepspermissions);
@@ -13,7 +13,7 @@ const StepsPermissions = ({ data }) => {
 
   return (
     <div className='flex flex-col gap-4'>
-      {data?.map((workflow) => {
+      {data?.workflowLevels?.map((workflow) => {
         return workflow.steps.map((step) => {
           const { name, description, id, stepTypeId } = step;
           return (
