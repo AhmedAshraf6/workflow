@@ -12,6 +12,8 @@ export default function FormRow({
   bgColorInput = 'bg-white',
   labelColor = 'text-gray-900',
   ring = 'ring-1',
+  readonly,
+  isrequired,
 }) {
   return (
     <div>
@@ -32,6 +34,8 @@ export default function FormRow({
           onChange={handleChange}
           className={`block w-full rounded-md border-0 py-1.5 ${bgColorInput} ${colorInput} shadow-sm  ${ring} ring-inset placeholder:text-gray-400  sm:text-sm sm:leading-6 px-2`}
           placeholder={placeholder}
+          readOnly={readonly}
+          required={isrequired}
         />
       </div>
     </div>

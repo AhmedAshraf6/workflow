@@ -1,10 +1,28 @@
 import { useDispatch } from 'react-redux';
 import { setEditGroup } from '../../features/modals/modalSlice';
 import { Link } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import customFetch, { checkForUnauthorizedResponse } from '../../utils/axios';
 
 export default function TableGroups({ data: groups }) {
   const dispatch = useDispatch();
-  // const {} = useSelector((store)=>)
+  const queryClient = useQueryClient();
+  const { data, mutate: deleteGroup } = useMutation({
+    mutationFn: async (groupid) => {
+      console.log(groupid);
+      const { data } = await customFetch.delete(`/Groups/${groupid}`);
+      return data;
+    },
+    onSuccess: () => {
+      toast.success('Deleted Successfully...');
+      queryClient.invalidateQueries({ queryKey: ['AllGroups'] });
+    },
+    onError: (error) => {
+      checkForUnauthorizedResponse(error, dispatch);
+    },
+  });
+  console.log(data);
   return (
     <div className='flex flex-col my-5 sm:my-8'>
       <div className='-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8'>
@@ -74,7 +92,10 @@ export default function TableGroups({ data: groups }) {
                       >
                         Edit
                       </span>
-                      <span className='text-red-600 hover:text-red-900 cursor-pointer'>
+                      <span
+                        className='text-red-600 hover:text-red-900 cursor-pointer'
+                        onClick={() => deleteGroup(group.id)}
+                      >
                         Delete
                       </span>
                     </td>

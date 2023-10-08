@@ -6,17 +6,10 @@ import {
   SmallSidebar,
 } from '../../components/SharedComponents';
 import { useSelector } from 'react-redux';
-import UserModal from '../../components/allUsers/UserModal';
-import GroupModal from '../../components/allGroups/GroupModal';
-import SidebarInput from '../../components/createApp/createForm/SidebarInput';
-import {
-  clearValues,
-  closeSidebarInputOpen,
-  setIsSidebarInputOpen,
-} from '../../features/app/formBuilderSlice';
+
 import { useDispatch } from 'react-redux';
-import StepModal from '../../components/createApp/CreateSteps/StepModal';
-import EditStepModal from '../../components/createApp/CreateSteps/EditStepModal';
+import StartNewRequest from '../../components/newrequest/StartNewRequest';
+import NewRequestModal from '../../components/newrequest/NewRequestModal';
 const SharedLayout = () => {
   const { isSidebarOpen } = useSelector((store) => store.user);
   const { isSidebarInputOpen } = useSelector((store) => store.formbuilder);
@@ -24,11 +17,9 @@ const SharedLayout = () => {
   return (
     <main className='h-screen '>
       <SmallSidebar />
-      <UserModal />
-      <GroupModal />
-      <SidebarInput />
-      <StepModal />
-      <EditStepModal />
+
+      <NewRequestModal />
+
       <div className='grid grid-cols-5 '>
         <BigSidebar />
         <div
@@ -44,6 +35,7 @@ const SharedLayout = () => {
           </div>
         </div>
       </div>
+      <StartNewRequest />
     </main>
   );
 };

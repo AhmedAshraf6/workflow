@@ -4,10 +4,28 @@ import {
   setEditMember,
   toogleUserModal,
 } from '../../features/modals/modalSlice';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import customFetch, { checkForUnauthorizedResponse } from '../../utils/axios';
+import { toast } from 'react-toastify';
 
 export default function Table({ data: users }) {
   const dispatch = useDispatch();
-  // const {} = useSelector((store)=>)
+  const queryClient = useQueryClient();
+
+  const { data, mutate: deleteUser } = useMutation({
+    mutationFn: async (userid) => {
+      const { data } = await customFetch.delete(`/Users/${userid}`);
+      return data;
+    },
+    onSuccess: () => {
+      toast.success('Deleted Successfully...');
+      queryClient.invalidateQueries({ queryKey: ['allUsers'] });
+    },
+    onError: (error) => {
+      checkForUnauthorizedResponse(error, dispatch);
+    },
+  });
+  console.log(data);
   return (
     <div className='flex flex-col my-5 sm:my-8'>
       <div className='-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8'>
@@ -94,7 +112,10 @@ export default function Table({ data: users }) {
                       >
                         Edit
                       </span>
-                      <span className='text-red-600 hover:text-red-900 cursor-pointer'>
+                      <span
+                        className='text-red-600 hover:text-red-900 cursor-pointer'
+                        onClick={() => deleteUser(user.id)}
+                      >
                         Delete
                       </span>
                     </td>

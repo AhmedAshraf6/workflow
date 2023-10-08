@@ -113,6 +113,18 @@ export const useFetchInputsTypesField = () => {
 
   return { options };
 };
+export const useFetchInputsTypesFieldInProcessInstance = () => {
+  const { data: fieldsTypesProcess, isLoading: isLoadingFields } = useQuery({
+    queryKey: ['getTypesInputFieldsInProcessInstance'],
+    queryFn: async () => {
+      const { data } = await customFetch('/FieldTypes');
+      return data;
+    },
+    refetchOnWindowFocus: false,
+  });
+
+  return { fieldsTypesProcess, isLoadingFields };
+};
 
 // fetch users and groups
 

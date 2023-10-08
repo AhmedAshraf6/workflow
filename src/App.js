@@ -25,6 +25,7 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import ProtectedAdmin from './pages/ProtectedAdmin';
 import AllGroupMembers from './pages/dashboard/AllGroupMembers';
+import CreateApplicationProcessInstance from './pages/dashboard/CreateApplicationProcessInstance';
 export default function App() {
   return (
     <BrowserRouter>
@@ -44,6 +45,11 @@ export default function App() {
           <Route path='inprogress' element={<InProgress />} />
           <Route path='approved' element={<Approved />} />
           <Route path='rejected' element={<Rejected />} />
+          <Route
+            path='createapplicationprocessinstances/:typeaction/:processinstancesid'
+            element={<CreateApplicationProcessInstance />}
+          />
+          {/* Prottected Admin */}
           <Route element={<ProtectedAdmin />}>
             <Route path='allapps' element={<AllApps />} />
             <Route path='createapp'>
@@ -63,6 +69,7 @@ export default function App() {
               <Route path='members/:groupId' element={<AllGroupMembers />} />
             </Route>
           </Route>
+          {/* Prottected Admin */}
         </Route>
 
         <Route path='landing' element={<Landing />} />

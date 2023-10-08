@@ -5,13 +5,16 @@ import {
   handleChangeMember,
   clearValues,
 } from '../../features/modals/modalSlice';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import customFetch, { checkForUnauthorizedResponse } from '../../utils/axios';
 import FormRow from '../SharedComponents/FormRow';
 import FormSelect from '../SharedComponents/FormSelect';
 import { toast } from 'react-toastify';
+import Loading from '../SharedComponents/Loading';
 
 const UserModal = () => {
+  const queryClient = useQueryClient();
+
   const {
     firstName,
     lastName,
@@ -45,7 +48,14 @@ const UserModal = () => {
       });
       return data;
     },
-    onSuccess: () => {},
+    onSuccess: (data) => {
+      document.getElementById('user_modal').close();
+
+      toast.success('user added');
+      queryClient.invalidateQueries({ queryKey: ['allUsers'] });
+
+      console.log(data);
+    },
     onError: (error) => {
       checkForUnauthorizedResponse(error, dispatch);
     },
@@ -60,7 +70,13 @@ const UserModal = () => {
       const { data } = await customFetch.put(`/Users/${userId}`, user);
       return data;
     },
-    onSuccess: () => {},
+    onSuccess: (data) => {
+      document.getElementById('user_modal').close();
+      toast.success('user editted');
+      queryClient.invalidateQueries({ queryKey: ['allUsers'] });
+
+      console.log(data);
+    },
     onError: (error) => {
       checkForUnauthorizedResponse(error, dispatch);
     },
@@ -90,6 +106,7 @@ const UserModal = () => {
           id: editUserId,
         },
       });
+      return;
     }
     createUser({ firstName, lastName, email, password, roleId });
   };
@@ -107,53 +124,57 @@ const UserModal = () => {
             ✕
           </button>
         </form>
-        <form
-          className='mt-2 sm:mt-8 flex flex-col gap-y-3 sm:gap-y-5'
-          onSubmit={onSubmit}
-        >
-          <FormRow
-            type='text'
-            name='firstName'
-            value={firstName}
-            handleChange={handleChange}
-          />
-          <FormRow
-            type='text'
-            name='lastName'
-            value={lastName}
-            handleChange={handleChange}
-          />
-
-          <FormRow
-            type='email'
-            name='email'
-            value={email}
-            handleChange={handleChange}
-          />
-          {!isEdittingMember && (
+        {loadCreateUser || loadEditUser ? (
+          <Loading />
+        ) : (
+          <form
+            className='mt-2 sm:mt-8 flex flex-col gap-y-3 sm:gap-y-5'
+            onSubmit={onSubmit}
+          >
             <FormRow
-              type='password'
-              name='password'
-              value={password}
+              type='text'
+              name='firstName'
+              value={firstName}
               handleChange={handleChange}
             />
-          )}
-          <FormSelect
-            name='roleId'
-            options={roles}
-            defaultValue={roleId}
-            handleChange={handleChange}
-            addEmptyOption=''
-          />
-          <button
-            type='submit'
-            className='btn btn-primary '
-            // disabled={isLoading}
-          >
-            {/* {isLoading ? 'loading...' : 'Submit'} */}
-            submit
-          </button>
-        </form>
+            <FormRow
+              type='text'
+              name='lastName'
+              value={lastName}
+              handleChange={handleChange}
+            />
+
+            <FormRow
+              type='email'
+              name='email'
+              value={email}
+              handleChange={handleChange}
+            />
+            {!isEdittingMember && (
+              <FormRow
+                type='password'
+                name='password'
+                value={password}
+                handleChange={handleChange}
+              />
+            )}
+            <FormSelect
+              name='roleId'
+              options={roles}
+              defaultValue={roleId}
+              handleChange={handleChange}
+              addEmptyOption='as'
+            />
+            <button
+              type='submit'
+              className='btn btn-primary '
+              // disabled={isLoading}
+            >
+              {/* {isLoading ? 'loading...' : 'Submit'} */}
+              submit
+            </button>
+          </form>
+        )}
       </div>
     </dialog>
   );
