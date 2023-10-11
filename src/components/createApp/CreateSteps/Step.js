@@ -6,11 +6,13 @@ import {
   setEditStep,
 } from '../../../features/app/StepsSlice';
 import { FaTrash } from 'react-icons/fa';
-
+import EditStepModal from './EditStepModal';
 const Step = ({ workflow }) => {
   const { workflowLevels } = useSelector((store) => store.steps);
   const dispatch = useDispatch();
   const [dis, setDis] = useState('');
+  const [open, setOpen] = useState(false);
+  const handleToggle = () => setOpen((prev) => !prev);
 
   useEffect(() => {
     const allsteps = document.querySelector('.allSteps');
@@ -83,7 +85,7 @@ const Step = ({ workflow }) => {
                         sortOrderChild: sortOrder,
                       })
                     );
-                    document.getElementById('edit_step_modal').showModal();
+                    handleToggle();
                   }}
                 >
                   Change
@@ -139,7 +141,7 @@ const Step = ({ workflow }) => {
                       sortOrderChild: sortOrder,
                     })
                   );
-                  document.getElementById('edit_step_modal').showModal();
+                  handleToggle();
                 }}
               >
                 Change
@@ -148,6 +150,7 @@ const Step = ({ workflow }) => {
           );
         })
       )}
+      {open && <EditStepModal open={open} handleToggle={handleToggle} />}
     </>
   );
 };

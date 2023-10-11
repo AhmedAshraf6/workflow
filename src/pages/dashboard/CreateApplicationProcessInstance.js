@@ -7,6 +7,7 @@ import { FormRow } from '../../components/SharedComponents';
 import {
   useFetchInputsTypesField,
   useFetchInputsTypesFieldInProcessInstance,
+  useCreateApplicationProcessInstanceInputs,
 } from '../../utils/reactQueryCustomHooks';
 import Loading from '../../components/SharedComponents/Loading';
 import { toast } from 'react-toastify';
@@ -17,7 +18,7 @@ const CreateApplicationProcessInstance = () => {
   const dispatch = useDispatch();
   const { data: singleAppProcessById, isLoading: isLoadingSingleAppProcess } =
     useQuery({
-      queryKey: ['single_process_instances'],
+      queryKey: ['single_process_instances', processinstancesid],
       queryFn: async () => {
         const { data } = await customFetch(
           `/ApplicationProcessInstanceSteps/${processinstancesid}`
@@ -39,31 +40,9 @@ const CreateApplicationProcessInstance = () => {
   //   },
   // });
   const {
-    mutate: createApplicationProcessInstanceInputs,
-    isLoading: isLoadingApplicationProcessInstanceInputs,
-  } = useMutation({
-    mutationFn: async ({ processinstancesid, statusTypeId, submittedForm }) => {
-      console.log(processinstancesid);
-      console.log(statusTypeId);
-      console.log(submittedForm);
-      const { data } = await customFetch.post(
-        '/ApplicationProcessInstanceInputs',
-        {
-          applicationProcessInstanceStepId: processinstancesid,
-          statusTypeId,
-          formUserInputs: submittedForm,
-        }
-      );
-      return data;
-    },
-    onSuccess: (data) => {
-      console.log(data);
-      toast.success('Group Added Successfully...');
-    },
-    onError: (error) => {
-      checkForUnauthorizedResponse(error, dispatch);
-    },
-  });
+    createApplicationProcessInstanceInputs,
+    isLoadingApplicationProcessInstanceInputs,
+  } = useCreateApplicationProcessInstanceInputs();
 
   const { fieldsTypesProcess, isLoadingFields } =
     useFetchInputsTypesFieldInProcessInstance();

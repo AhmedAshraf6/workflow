@@ -15,8 +15,9 @@ import {
 } from '../../utils/reactQueryCustomHooks';
 import Loading from '../SharedComponents/Loading';
 import FormSelectPackage from '../SharedComponents/FormSelectPackage';
+import cn from 'classnames';
 
-export default function GroupModal() {
+export default function GroupModal({ open, handleToggle }) {
   const {
     nameOfGroup,
     descGroup,
@@ -31,7 +32,10 @@ export default function GroupModal() {
   const { data, isLoading: usersIsLoading } = useFetchUsers();
   const { createGroup, isCreateGroupLoading } = useCreateGroup();
   const { editGroup, isEditGroupLoading } = useEditGroup();
-
+  const modalClass = cn({
+    'modal modal-bottom sm:modal-middle': true,
+    'modal-open': open,
+  });
   // Handle Change
   const handleChange = (e) => {
     const name = e.target.name;
@@ -68,11 +72,11 @@ export default function GroupModal() {
       return;
     }
     createGroup({ nameOfGroup, descGroup, userIdsInGroup });
-    document.getElementById('group_modal').close();
+    handleToggle();
   };
 
   return (
-    <dialog id='group_modal' className='modal'>
+    <dialog id='group_modal' className={modalClass}>
       <div className='modal-box'>
         <form method='dialog'>
           {/* if there is a button in form, it will close the modal */}
@@ -80,6 +84,7 @@ export default function GroupModal() {
             className='btn btn-sm btn-circle btn-ghost absolute right-2 top-2'
             onClick={() => {
               dispatch(clearValues());
+              handleToggle();
             }}
           >
             ✕

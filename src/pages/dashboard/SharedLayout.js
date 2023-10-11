@@ -9,7 +9,6 @@ import { useSelector } from 'react-redux';
 
 import { useDispatch } from 'react-redux';
 import StartNewRequest from '../../components/newrequest/StartNewRequest';
-import NewRequestModal from '../../components/newrequest/NewRequestModal';
 const SharedLayout = () => {
   const { isSidebarOpen } = useSelector((store) => store.user);
   const { isSidebarInputOpen } = useSelector((store) => store.formbuilder);
@@ -17,8 +16,6 @@ const SharedLayout = () => {
   return (
     <main className='h-screen '>
       <SmallSidebar />
-
-      <NewRequestModal />
 
       <div className='grid grid-cols-5 '>
         <BigSidebar />

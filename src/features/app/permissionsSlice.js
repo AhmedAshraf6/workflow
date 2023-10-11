@@ -41,13 +41,13 @@ const permissionsSlice = createSlice({
         const steps = workflow?.steps?.map((step) => {
           const stepId = step.id;
           const stepTypeId = step.stepTypeId;
-
+          console.log(stepTypeId);
           const sections = formPermissions?.sections?.map((section) => {
             const fields = section?.fields?.map((field) => {
               return {
                 stepId,
                 fieldId: field.id,
-                permissionTypeId: stepTypeId === 1 ? 8 : 7,
+                permissionTypeId: stepTypeId == 1 ? 8 : 7,
               };
             });
             return fields;
@@ -57,7 +57,7 @@ const permissionsSlice = createSlice({
             return {
               stepId,
               fieldId: field.id,
-              permissionTypeId: stepTypeId === 1 ? 8 : 7,
+              permissionTypeId: stepTypeId == 1 ? 8 : 7,
             };
           });
 

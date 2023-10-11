@@ -1,14 +1,17 @@
 import { useQuery } from '@tanstack/react-query';
-import React from 'react';
+import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import customFetch, { checkForUnauthorizedResponse } from '../../utils/axios';
 import { useDispatch } from 'react-redux';
 import Loading from '../../components/SharedComponents/Loading';
 import TableGroupMembers from '../../components/allGroups/TableGroupMembers';
+import GroupModal from '../../components/allGroups/GroupModal';
 
 export default function AllGroupMembers() {
   const { groupId } = useParams();
   const dispatch = useDispatch();
+  const [open, setOpen] = useState(false);
+  const handleToggle = () => setOpen((prev) => !prev);
   const { data, isLoading } = useQuery({
     queryKey: ['allGroupMembers', groupId],
     queryFn: async () => {
@@ -29,10 +32,7 @@ export default function AllGroupMembers() {
           <h3 className='text-lg sm:text-2xl text-primary font-semibold'>
             No Members Yet
           </h3>
-          <button
-            className='btn btn-primary'
-            onClick={() => document.getElementById('group_modal').showModal()}
-          >
+          <button className='btn btn-primary' onClick={handleToggle}>
             Add Member
           </button>
         </div>
@@ -40,20 +40,23 @@ export default function AllGroupMembers() {
     );
   }
   return (
-    <div className='AllGroups mt-4 sm:mt-6'>
-      <div className='flex justify-between items-center'>
-        <h1 className='text-lg lg:text-xl text-primary font-semibold'>
-          {data?.data?.name}
-        </h1>
-        <button
-          className='btn-primary hover:bg-primaryHover'
-          onClick={() => document.getElementById('group_modal').showModal()}
-        >
-          Add Member
-        </button>
+    <>
+      <div className='AllGroups mt-4 sm:mt-6'>
+        <div className='flex justify-between items-center'>
+          <h1 className='text-lg lg:text-xl text-primary font-semibold'>
+            {data?.data?.name}
+          </h1>
+          <button
+            className='btn-primary hover:bg-primaryHover'
+            onClick={handleToggle}
+          >
+            Add Member
+          </button>
+        </div>
+        {/* Table */}
+        <TableGroupMembers data={data?.data} />
       </div>
-      {/* Table */}
-      <TableGroupMembers data={data?.data} />
-    </div>
+      {open && <GroupModal open={open} handleToggle={handleToggle} />}
+    </>
   );
 }

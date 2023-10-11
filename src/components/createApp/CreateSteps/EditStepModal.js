@@ -26,8 +26,9 @@ import {
   useFetchUsers,
 } from '../../../utils/reactQueryCustomHooks';
 import FormSelectPackage from '../../SharedComponents/FormSelectPackage';
+import cn from 'classnames';
 
-export default function EditStepModal() {
+export default function EditStepModal({ open, handleToggle }) {
   const dispatch = useDispatch();
   // quiers
   const { data: users, isLoading: usersIsLoading } = useFetchUsers();
@@ -36,7 +37,10 @@ export default function EditStepModal() {
   const { name, description, stepUserPermissions } = useSelector(
     (store) => store.steps
   );
-
+  const modalClass = cn({
+    'modal modal-bottom sm:modal-middle': true,
+    'modal-open': open,
+  });
   // Handle Submit
   const onSubmit = (e) => {
     e.preventDefault();
@@ -52,8 +56,7 @@ export default function EditStepModal() {
 
     dispatch(editStepInsideWorkflowLevels());
     dispatch(clearValues());
-    document.getElementById('edit_step_modal').close();
-    // editApp({ nameOfGroup, descGroup, userIdsInGroup });
+    handleToggle(); // editApp({ nameOfGroup, descGroup, userIdsInGroup });
   };
 
   const handleSelect = (choice) => {
@@ -81,9 +84,15 @@ export default function EditStepModal() {
     dispatch(handleChange({ name, value }));
   };
   return (
-    <dialog id='edit_step_modal' className='modal'>
+    <dialog id='edit_step_modal' className={modalClass}>
       <div className='modal-box max-w-sm'>
-        <form method='dialog' onClick={() => dispatch(clearValues())}>
+        <form
+          method='dialog'
+          onClick={() => {
+            dispatch(clearValues());
+            handleToggle();
+          }}
+        >
           {/* if there is a button in form, it will close the modal */}
           <button className='btn btn-sm btn-circle btn-ghost absolute right-2 top-2'>
             ✕

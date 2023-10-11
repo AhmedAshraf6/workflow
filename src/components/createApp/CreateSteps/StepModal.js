@@ -22,8 +22,9 @@ import {
   useFetchUsers,
 } from '../../../utils/reactQueryCustomHooks';
 import FormSelectPackage from '../../SharedComponents/FormSelectPackage';
+import cn from 'classnames';
 
-export default function StepModal() {
+export default function StepModal({ open, handleToggle }) {
   const dispatch = useDispatch();
   // quiers
   const { data: users, isLoading: usersIsLoading } = useFetchUsers();
@@ -41,7 +42,10 @@ export default function StepModal() {
   } = useSelector((store) => store.steps);
   const [active, setActive] = useState(false);
   const [stepTypeIdState, setStepTypeIdState] = useState('');
-
+  const modalClass = cn({
+    'modal modal-bottom sm:modal-middle': true,
+    'modal-open': open,
+  });
   // Handle Submit
   const onSubmit = (e) => {
     e.preventDefault();
@@ -99,7 +103,7 @@ export default function StepModal() {
     };
     dispatch(addStepToWorkflowLevels(step));
     dispatch(clearValues());
-    document.getElementById('step_modal').close();
+    handleToggle();
   };
   const handleSelectPack = (choice, index, stepTypeIdState) => {
     const tempChoice = choice.map((ch) => {
@@ -146,11 +150,14 @@ export default function StepModal() {
     dispatch(handleChange({ name, value }));
   };
   return (
-    <dialog id='step_modal' className='modal'>
+    <dialog id='step_modal' className={modalClass}>
       <div className='modal-box max-w-sm'>
         <form method='dialog' onClick={() => dispatch(clearValues())}>
           {/* if there is a button in form, it will close the modal */}
-          <button className='btn btn-sm btn-circle btn-ghost absolute right-2 top-2'>
+          <button
+            className='btn btn-sm btn-circle btn-ghost absolute right-2 top-2'
+            onClick={handleToggle}
+          >
             ✕
           </button>
         </form>

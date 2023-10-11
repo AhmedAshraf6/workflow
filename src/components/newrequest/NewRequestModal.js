@@ -4,10 +4,15 @@ import customFetch, { checkForUnauthorizedResponse } from '../../utils/axios';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import Loading from '../SharedComponents/Loading';
 import { useNavigate } from 'react-router-dom';
+import cn from 'classnames';
 
-export default function NewRequestModal() {
+export default function NewRequestModal({ open, handleToggle }) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const modalClass = cn({
+    'modal modal-bottom sm:modal-middle': true,
+    'modal-open': open,
+  });
   const { data: apps, isLoading: isLoadingApps } = useQuery({
     queryKey: ['all_apps_process_instancess'],
     queryFn: async () => {
@@ -18,6 +23,7 @@ export default function NewRequestModal() {
       checkForUnauthorizedResponse(error, dispatch);
     },
   });
+
   const { mutate: createAppProcessInstances, isLoading: isLoadingAppInstance } =
     useMutation({
       mutationFn: async (appid) => {
@@ -30,7 +36,7 @@ export default function NewRequestModal() {
         return data;
       },
       onSuccess: (data) => {
-        document.getElementById('new_app_request_modal').close();
+        handleToggle();
         navigate(`createapplicationprocessinstances/Submitted/${data.id}`);
         console.log(data);
       },
@@ -40,7 +46,7 @@ export default function NewRequestModal() {
     });
 
   return (
-    <dialog id='new_app_request_modal' className='modal'>
+    <dialog id='new_app_request_modal' className={modalClass}>
       <div className='modal-box'>
         <div className='flex justify-between items-center'>
           <h1 className='text-md sm:text-xl font-semibold text-base-content'>
@@ -48,7 +54,10 @@ export default function NewRequestModal() {
           </h1>
           <form method='dialog'>
             {/* if there is a button in form, it will close the modal */}
-            <button className='btn btn-sm btn-circle btn-ghost absolute right-2 top-2'>
+            <button
+              className='btn btn-sm btn-circle btn-ghost absolute right-2 top-2'
+              onClick={handleToggle}
+            >
               ✕
             </button>
           </form>

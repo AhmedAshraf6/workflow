@@ -248,3 +248,80 @@ export const useCreatePermissions = () => {
   });
   return { data, createPermission, isLoadingCreatePermissions };
 };
+
+// get application process instance steps
+export const useCreateApplicationProcessInstanceInputs = () => {
+  const dispatch = useDispatch();
+  const queryClient = useQueryClient();
+  const {
+    mutate: createApplicationProcessInstanceInputs,
+    isLoading: isLoadingApplicationProcessInstanceInputs,
+  } = useMutation({
+    mutationFn: async ({
+      processinstancesid,
+      statusTypeId,
+      submittedForm,
+      handleToggle,
+    }) => {
+      console.log(processinstancesid);
+      console.log(statusTypeId);
+      console.log(submittedForm);
+      const { data } = await customFetch.post(
+        '/ApplicationProcessInstanceInputs',
+        {
+          applicationProcessInstanceStepId: processinstancesid,
+          statusTypeId,
+          formUserInputs: submittedForm,
+        }
+      );
+      handleToggle();
+      return data;
+    },
+    onSuccess: (data) => {
+      console.log(data);
+      queryClient.invalidateQueries({ queryKey: ['get_input_requests'] });
+      toast.success('added successfully');
+    },
+    onError: (error) => {
+      checkForUnauthorizedResponse(error, dispatch);
+    },
+  });
+  return {
+    createApplicationProcessInstanceInputs,
+    isLoadingApplicationProcessInstanceInputs,
+  };
+};
+export const useCreateApplicationProcessInstanceApprove = () => {
+  const dispatch = useDispatch();
+  const queryClient = useQueryClient();
+  const {
+    mutate: createApplicationProcessInstanceApprove,
+    isLoading: isLoadingApplicationProcessInstanceApprove,
+  } = useMutation({
+    mutationFn: async ({ processinstancesid, statusTypeId, handleToggle }) => {
+      console.log(processinstancesid);
+      console.log(statusTypeId);
+      const { data } = await customFetch.post(
+        '/ApplicationProcessInstanceInputs',
+        {
+          applicationProcessInstanceStepId: processinstancesid,
+          statusTypeId,
+        }
+      );
+      handleToggle();
+      return data;
+    },
+    onSuccess: (data) => {
+      console.log(data);
+      queryClient.invalidateQueries({ queryKey: ['get_Approve_requests'] });
+      toast.success('added successfully');
+    },
+    onError: (error) => {
+      checkForUnauthorizedResponse(error, dispatch);
+    },
+  });
+  return {
+    createApplicationProcessInstanceApprove,
+    isLoadingApplicationProcessInstanceApprove,
+  };
+};

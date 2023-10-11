@@ -61,15 +61,12 @@ const CreatePermisions = () => {
       fetchData2();
     }
   }, [stepsPermission]);
-  console.log(stepsPermission);
-  console.log(formPermission);
 
   useEffect(() => {
     if (
       formPermission?.sections?.length > 0 ||
       formPermission?.field?.lenght > 0
     ) {
-      console.log('yes');
       dispatch(startLoading());
       dispatch(
         AddPermissions({
@@ -91,7 +88,6 @@ const CreatePermisions = () => {
       applicationProcessId: appProcessId,
     });
   };
-  console.log(data);
   return (
     <>
       <div className='grid grid-cols-1 sm:grid-cols-3 gap-4 '>

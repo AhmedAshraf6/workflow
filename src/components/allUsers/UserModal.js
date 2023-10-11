@@ -11,10 +11,14 @@ import FormRow from '../SharedComponents/FormRow';
 import FormSelect from '../SharedComponents/FormSelect';
 import { toast } from 'react-toastify';
 import Loading from '../SharedComponents/Loading';
+import cn from 'classnames';
 
-const UserModal = () => {
+const UserModal = ({ open, handleToggle }) => {
   const queryClient = useQueryClient();
-
+  const modalClass = cn({
+    'modal modal-bottom sm:modal-middle': true,
+    'modal-open': open,
+  });
   const {
     firstName,
     lastName,
@@ -49,7 +53,7 @@ const UserModal = () => {
       return data;
     },
     onSuccess: (data) => {
-      document.getElementById('user_modal').close();
+      handleToggle();
 
       toast.success('user added');
       queryClient.invalidateQueries({ queryKey: ['allUsers'] });
@@ -71,7 +75,7 @@ const UserModal = () => {
       return data;
     },
     onSuccess: (data) => {
-      document.getElementById('user_modal').close();
+      handleToggle();
       toast.success('user editted');
       queryClient.invalidateQueries({ queryKey: ['allUsers'] });
 
@@ -111,7 +115,7 @@ const UserModal = () => {
     createUser({ firstName, lastName, email, password, roleId });
   };
   return (
-    <dialog id='user_modal' className='modal'>
+    <dialog id='user_modal' className={modalClass}>
       <div className='modal-box'>
         <form method='dialog'>
           {/* if there is a button in form, it will close the modal */}
@@ -119,6 +123,7 @@ const UserModal = () => {
             className='btn btn-sm btn-circle btn-ghost absolute right-2 top-2'
             onClick={() => {
               dispatch(clearValues());
+              handleToggle();
             }}
           >
             ✕

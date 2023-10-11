@@ -46,6 +46,8 @@ const FormPermissions = ({ data }) => {
                               permission.stepId === stepId &&
                               permission.fieldId === field.id
                           );
+                          console.log(role.id + role.name);
+                          // console.log();
                           return (
                             <div className='join mt-5' key={role.id}>
                               <button

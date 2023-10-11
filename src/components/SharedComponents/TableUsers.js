@@ -1,32 +1,33 @@
+import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
-import { setEditGroup } from '../../features/modals/modalSlice';
-import { Link } from 'react-router-dom';
-import { toast } from 'react-toastify';
+import {
+  setEditMember,
+  toogleUserModal,
+} from '../../features/modals/modalSlice';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import customFetch, { checkForUnauthorizedResponse } from '../../utils/axios';
-import GroupModal from './GroupModal';
+import { toast } from 'react-toastify';
 import { useState } from 'react';
+import UserModal from '../allUsers/UserModal';
 
-export default function TableGroups({ data: groups }) {
+export default function TableUsers({ data: users }) {
   const dispatch = useDispatch();
   const queryClient = useQueryClient();
   const [open, setOpen] = useState(false);
   const handleToggle = () => setOpen((prev) => !prev);
-  const { data, mutate: deleteGroup } = useMutation({
-    mutationFn: async (groupid) => {
-      console.log(groupid);
-      const { data } = await customFetch.delete(`/Groups/${groupid}`);
+  const { data, mutate: deleteUser } = useMutation({
+    mutationFn: async (userid) => {
+      const { data } = await customFetch.delete(`/Users/${userid}`);
       return data;
     },
     onSuccess: () => {
       toast.success('Deleted Successfully...');
-      queryClient.invalidateQueries({ queryKey: ['AllGroups'] });
+      queryClient.invalidateQueries({ queryKey: ['allUsers'] });
     },
     onError: (error) => {
       checkForUnauthorizedResponse(error, dispatch);
     },
   });
-  console.log(data);
   return (
     <>
       <div className='flex flex-col my-5 sm:my-8'>
@@ -46,50 +47,68 @@ export default function TableGroups({ data: groups }) {
                       scope='col'
                       className='px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider'
                     >
-                      Name
+                      First Name
                     </th>
                     <th
                       scope='col'
                       className='px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider'
                     >
-                      Description
+                      Last Name
                     </th>
-
+                    <th
+                      scope='col'
+                      className='px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider'
+                    >
+                      Email
+                    </th>
+                    <th
+                      scope='col'
+                      className='px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider'
+                    >
+                      Role
+                    </th>
                     <th scope='col' className='relative px-6 py-3'>
                       <span className='sr-only'>Edit</span>
                     </th>
                   </tr>
                 </thead>
                 <tbody className='bg-white divide-y divide-gray-200'>
-                  {groups?.map((group) => (
-                    <tr key={group.id}>
+                  {users?.map((user) => (
+                    <tr key={user.id}>
                       <td className='px-6 py-4 whitespace-nowrap text-sm text-gray-500'>
-                        {group.id}
+                        {user.id}
                       </td>
 
                       <td className='px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900'>
-                        {group.name}
+                        {user.firstName}
                       </td>
                       <td className='px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900'>
-                        {group.description}
+                        {user.lastName}
+                      </td>
+                      <td className='px-6 py-4 whitespace-nowrap text-sm text-gray-500'>
+                        {user.email}
+                      </td>
+                      <td className='px-6 py-4 whitespace-nowrap'>
+                        <span
+                          className='px-2 inline-flex text-xs leading-5
+                      font-semibold rounded-full bg-green-100 text-green-800'
+                        >
+                          {user.role.name}
+                        </span>
                       </td>
 
                       <td className='px-6 py-4 whitespace-nowrap text-right text-sm font-medium flex gap-3'>
-                        <Link
-                          className='text-primary hover:text-primaryHover cursor-pointer'
-                          to={`members/${group.id}`}
-                        >
-                          view members
-                        </Link>
                         <span
                           className='text-indigo-600 hover:text-indigo-900 cursor-pointer'
                           onClick={() => {
                             handleToggle();
                             dispatch(
-                              setEditGroup({
-                                groupId: group.id,
-                                nameOfGroup: group.name,
-                                descGroup: group.description,
+                              setEditMember({
+                                editUserId: user.id,
+                                firstName: user.firstName,
+                                lastName: user.lastName,
+                                email: user.email,
+                                roleId: user.role.id,
                               })
                             );
                           }}
@@ -98,7 +117,7 @@ export default function TableGroups({ data: groups }) {
                         </span>
                         <span
                           className='text-red-600 hover:text-red-900 cursor-pointer'
-                          onClick={() => deleteGroup(group.id)}
+                          onClick={() => deleteUser(user.id)}
                         >
                           Delete
                         </span>
@@ -111,7 +130,7 @@ export default function TableGroups({ data: groups }) {
           </div>
         </div>
       </div>
-      {open && <GroupModal open={open} handleToggle={handleToggle} />}
+      {open && <UserModal open={open} handleToggle={handleToggle} />}
     </>
   );
 }
