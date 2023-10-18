@@ -15,7 +15,8 @@ const initialState = {
   indexParent: '',
   indexChild: '',
   sortOrder: '',
-  formId: '40',
+  formId: '',
+  isEditForm: false,
 };
 
 const FormBuilderSlice = createSlice({
@@ -97,6 +98,10 @@ const FormBuilderSlice = createSlice({
     addFormId: (state, { payload }) => {
       state.formId = payload;
     },
+    setIsEditForm: (state, { payload: { sections, fields } }) => {
+      state.isEditForm = true;
+      state.sections.push(...sections);
+    },
   },
 });
 export const {
@@ -115,6 +120,7 @@ export const {
   editInputsInsideSections,
   deleteInputsInsideSections,
   addFormId,
+  setIsEditForm,
 } = FormBuilderSlice.actions;
 
 export default FormBuilderSlice.reducer;

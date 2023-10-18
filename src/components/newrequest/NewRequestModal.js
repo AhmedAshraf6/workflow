@@ -16,7 +16,9 @@ export default function NewRequestModal({ open, handleToggle }) {
   const { data: apps, isLoading: isLoadingApps } = useQuery({
     queryKey: ['all_apps_process_instancess'],
     queryFn: async () => {
-      const { data } = await customFetch('/ApplicationProcesses?IsDraft=false');
+      const { data } = await customFetch(
+        '/ApplicationProcesses?IsDraft=false&pageNumber=2'
+      );
       return data;
     },
     onError: (error) => {
@@ -37,7 +39,9 @@ export default function NewRequestModal({ open, handleToggle }) {
       },
       onSuccess: (data) => {
         handleToggle();
-        navigate(`createapplicationprocessinstances/Submitted/${data.id}`);
+        navigate(
+          `createapplicationprocessinstances/Submitted/${data.currentStepId}`
+        );
         console.log(data);
       },
       onError: (error) => {

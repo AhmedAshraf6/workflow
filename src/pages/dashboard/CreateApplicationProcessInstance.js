@@ -18,7 +18,7 @@ const CreateApplicationProcessInstance = () => {
   const dispatch = useDispatch();
   const { data: singleAppProcessById, isLoading: isLoadingSingleAppProcess } =
     useQuery({
-      queryKey: ['single_process_instances', processinstancesid],
+      queryKey: ['single_process_instances'],
       queryFn: async () => {
         const { data } = await customFetch(
           `/ApplicationProcessInstanceSteps/${processinstancesid}`
@@ -52,7 +52,7 @@ const CreateApplicationProcessInstance = () => {
   // const rejectedStatusType = statusType?.find(
   //   (statustype) => statustype.name === 'Rejected'
   // );
-
+  console.log(singleAppProcessById);
   if (isLoadingFields || isLoadingSingleAppProcess) {
     //isLoadingStatusType
     return <Loading />;

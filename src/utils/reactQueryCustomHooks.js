@@ -257,12 +257,7 @@ export const useCreateApplicationProcessInstanceInputs = () => {
     mutate: createApplicationProcessInstanceInputs,
     isLoading: isLoadingApplicationProcessInstanceInputs,
   } = useMutation({
-    mutationFn: async ({
-      processinstancesid,
-      statusTypeId,
-      submittedForm,
-      handleToggle,
-    }) => {
+    mutationFn: async ({ processinstancesid, statusTypeId, submittedForm }) => {
       console.log(processinstancesid);
       console.log(statusTypeId);
       console.log(submittedForm);
@@ -274,7 +269,6 @@ export const useCreateApplicationProcessInstanceInputs = () => {
           formUserInputs: submittedForm,
         }
       );
-      handleToggle();
       return data;
     },
     onSuccess: (data) => {

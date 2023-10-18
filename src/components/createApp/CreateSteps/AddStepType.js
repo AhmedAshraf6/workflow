@@ -30,7 +30,7 @@ export default function AddStepType() {
             className='absolute rounded-full bg-white w-[30px] h-[30px] flex justify-center items-center bottom-10 left-10 tooltip '
             onClick={() => {
               dispatch(
-                handleChange({ name: 'stepTypeId', value: data?.data[0].id })
+                handleChange({ name: 'stepTypeId', value: data?.data[1].id })
               );
               handleToggle();
               setActive(!active);
@@ -53,7 +53,7 @@ export default function AddStepType() {
             className='absolute rounded-full bg-white w-[30px] h-[30px] flex justify-center items-center bottom-10 right-10 tooltip'
             onClick={() => {
               dispatch(
-                handleChange({ name: 'stepTypeId', value: data?.data[1].id })
+                handleChange({ name: 'stepTypeId', value: data?.data[0].id })
               );
 
               handleToggle();

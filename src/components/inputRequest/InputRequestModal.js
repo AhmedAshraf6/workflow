@@ -20,7 +20,7 @@ const InputRequestModal = ({ inputid, open, handleToggle, typeaction }) => {
   });
   const { data: singleAppProcessById, isLoading: isLoadingSingleAppProcess } =
     useQuery({
-      queryKey: ['single_process_instances', inputid],
+      queryKey: ['single_process_instances_input', inputid],
       queryFn: async () => {
         const { data } = await customFetch(
           `/ApplicationProcessInstanceSteps/${inputid}`
