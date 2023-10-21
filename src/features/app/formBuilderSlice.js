@@ -1,4 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
+import { v4 as uuidv4 } from 'uuid';
 
 const initialState = {
   sections: [
@@ -17,6 +18,7 @@ const initialState = {
   sortOrder: '',
   formId: '',
   isEditForm: false,
+  UpdatedFormId: '',
 };
 
 const FormBuilderSlice = createSlice({
@@ -88,6 +90,7 @@ const FormBuilderSlice = createSlice({
       state.indexParent = '';
       state.indexChild = '';
     },
+    clearAllValues: (state) => initialState,
     // Edit Fields frozen objects doesn't editted outside dispatch
     editFields: (state, { payload: { indexSec, id, destination, add } }) => {
       state.sections[indexSec].fields.splice(destination, 0, {
@@ -98,9 +101,21 @@ const FormBuilderSlice = createSlice({
     addFormId: (state, { payload }) => {
       state.formId = payload;
     },
-    setIsEditForm: (state, { payload: { sections, fields } }) => {
+    setIsEditForm: (state, { payload: { sections, fields, updateformId } }) => {
       state.isEditForm = true;
-      state.sections.push(...sections);
+      state.UpdatedFormId = updateformId;
+      // sections[0].fields = fields.length > 0 || [];
+      const tempSections = sections.map((sec) => {
+        const fields = sec.fields.map((field) => {
+          return { ...field, id: uuidv4() };
+        });
+        return { ...sec, id: `${uuidv4()}`, fields };
+      });
+      const tempFields = fields?.map((tempfield) => {
+        return { ...tempfield, id: uuidv4() };
+      });
+      state.sections[0].fields = tempFields.length > 0 ? tempFields : [];
+      state.sections = tempSections.flat();
     },
   },
 });
@@ -121,6 +136,7 @@ export const {
   deleteInputsInsideSections,
   addFormId,
   setIsEditForm,
+  clearAllValues,
 } = FormBuilderSlice.actions;
 
 export default FormBuilderSlice.reducer;

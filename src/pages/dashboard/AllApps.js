@@ -57,7 +57,13 @@ export default function AllApps() {
       return data.data;
     },
     onSuccess: (data) => {
-      dispatch(setIsEditForm({ sections: data.sections, fields: data.fields }));
+      dispatch(
+        setIsEditForm({
+          sections: data.sections,
+          fields: data.fields,
+          updateformId: formId,
+        })
+      );
       navigate('/createapp/addform');
       console.log(data);
     },

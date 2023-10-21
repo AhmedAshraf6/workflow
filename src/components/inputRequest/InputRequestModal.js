@@ -119,6 +119,7 @@ const InputRequestModal = ({ inputid, open, handleToggle, typeaction }) => {
                                 labelText={fieldName}
                                 isrequired={isRequired}
                                 type={tag?.tagAttributes[0]?.value}
+                                value={value}
                                 key={id}
                                 readonly={
                                   permissionType?.name === 'Readonly' && true
@@ -159,6 +160,7 @@ const InputRequestModal = ({ inputid, open, handleToggle, typeaction }) => {
                             isrequired={isRequired}
                             type={tag?.tagAttributes[0]?.value}
                             key={id}
+                            value={value}
                             readonly={
                               permissionType?.name === 'Readonly' && true
                             }

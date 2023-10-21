@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import customFetch, { checkForUnauthorizedResponse } from '../../utils/axios';
 import { useMutation, useQuery } from '@tanstack/react-query';
@@ -9,6 +9,7 @@ import cn from 'classnames';
 export default function NewRequestModal({ open, handleToggle }) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const [currentStepId, setCurrentStepId] = useState('');
   const modalClass = cn({
     'modal modal-bottom sm:modal-middle': true,
     'modal-open': open,
@@ -38,17 +39,41 @@ export default function NewRequestModal({ open, handleToggle }) {
         return data;
       },
       onSuccess: (data) => {
-        handleToggle();
-        navigate(
-          `createapplicationprocessinstances/Submitted/${data.currentStepId}`
-        );
+        setCurrentStepId(data.currentStepId);
+        // handleToggle();
+        // navigate(
+        //   `createapplicationprocessinstances/Submitted/${data.currentStepId}`
+        // );
         console.log(data);
       },
       onError: (error) => {
         checkForUnauthorizedResponse(error, dispatch);
       },
     });
-
+  const { data, isLoading: isLoadingCreateApp } = useQuery({
+    queryKey: ['get_input_requests_for_start', currentStepId],
+    queryFn: async () => {
+      const data = await customFetch(
+        `/ApplicationProcessInstanceSteps/ByStepTypeId/${2}`
+      );
+      return { data };
+    },
+    onSuccess: (data) => {
+      const stepinstance = data.data.data.pendingRequests.find(
+        (stepinc) => stepinc.step.id == currentStepId
+      );
+      handleToggle();
+      navigate(
+        `createapplicationprocessinstances/Submitted/${stepinstance.id}`
+      );
+    },
+    onError: (error) => {
+      console.log(error);
+      checkForUnauthorizedResponse(error, dispatch);
+    },
+    enabled: !!currentStepId,
+  });
+  console.log(isLoadingCreateApp);
   return (
     <dialog id='new_app_request_modal' className={modalClass}>
       <div className='modal-box'>
@@ -71,7 +96,9 @@ export default function NewRequestModal({ open, handleToggle }) {
           className='mt-2 sm:mt-8 flex flex-col gap-y-3 sm:gap-y-5 '
           // onSubmit={onSubmit}
         >
-          {isLoadingApps || isLoadingAppInstance ? (
+          {isLoadingApps ||
+          isLoadingAppInstance ||
+          (currentStepId && isLoadingCreateApp) ? (
             <span className='loading loading-dots loading-lg mx-auto '></span>
           ) : (
             apps?.items?.map((item) => {

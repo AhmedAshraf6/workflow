@@ -57,7 +57,7 @@ export default function SidebarInput() {
   return (
     <>
       <div
-        className={`${isSidebarInputOpen && 'overlaySidebar'}`}
+        className={`z-20 ${isSidebarInputOpen && 'overlaySidebar'}`}
         onClick={detectToggle}
       >
         <aside

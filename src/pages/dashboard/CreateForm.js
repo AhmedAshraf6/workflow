@@ -11,15 +11,20 @@ import { useSelector } from 'react-redux';
 import {
   addFormId,
   addNewFormDataToSections,
+  clearAllValues,
   editFields,
 } from '../../features/app/formBuilderSlice';
 import { toast } from 'react-toastify';
 import { changeStepNumber } from '../../features/app/FormAppSlice';
+import { useNavigate } from 'react-router-dom';
 export default function CreateForm() {
   const dispatch = useDispatch();
   const [inputData, seInputData] = useState([]);
   const { appProcessId } = useSelector((store) => store.formapp);
-  const { sections } = useSelector((store) => store.formbuilder);
+  const navigate = useNavigate();
+  const { sections, isEditForm, UpdatedFormId } = useSelector(
+    (store) => store.formbuilder
+  );
 
   const { data, isLoading } = useQuery({
     queryKey: ['inputsData'],
@@ -41,7 +46,7 @@ export default function CreateForm() {
       checkForUnauthorizedResponse(error, dispatch);
     },
   });
-
+  console.log(isEditForm);
   // Add Form Data To api
   const { mutate: createForm, isLoading: isCreateFormLoading } = useMutation({
     mutationFn: async (dataSend) => {
@@ -51,6 +56,24 @@ export default function CreateForm() {
     onSuccess: (data) => {
       dispatch(changeStepNumber(3));
       dispatch(addFormId(data?.id));
+    },
+    onError: (error) => {
+      checkForUnauthorizedResponse(error, dispatch);
+    },
+  });
+  const { mutate: updateForm, isLoading: isUpdateFormLoading } = useMutation({
+    mutationFn: async (dataSend) => {
+      console.log(dataSend);
+      const { data } = await customFetch.put(
+        `/Forms/${UpdatedFormId}`,
+        dataSend
+      );
+      return data;
+    },
+    onSuccess: (data) => {
+      clearAllValues();
+      toast.success('Form Editted');
+      navigate('/allapps');
     },
     onError: (error) => {
       checkForUnauthorizedResponse(error, dispatch);
@@ -184,6 +207,10 @@ export default function CreateForm() {
       toast.error('Please provide one or more field');
       return;
     }
+    if (isEditForm) {
+      updateForm({ formId: UpdatedFormId, fields, sections: tempSections });
+      return;
+    }
     createForm({
       applicationProcessId: appProcessId,
       fields,
@@ -201,7 +228,7 @@ export default function CreateForm() {
       </div>
       <form onSubmit={handleSubmit} className='flex justify-center'>
         <button type='submit' className='btn btn-primary  '>
-          Next
+          {isEditForm ? 'Edit' : 'Next'}
         </button>
       </form>
     </DragDropContext>

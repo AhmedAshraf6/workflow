@@ -11,6 +11,7 @@ import customFetch, { checkForUnauthorizedResponse } from '../../utils/axios';
 import { toast } from 'react-toastify';
 import { FormRow } from '../SharedComponents';
 import { useNavigate } from 'react-router-dom';
+import { clearAllValues } from '../../features/app/formBuilderSlice';
 
 export default function FormApp() {
   const { Name, Description } = useSelector((store) => store.formapp);
@@ -25,6 +26,7 @@ export default function FormApp() {
     },
     onSuccess: (data) => {
       dispatch(clearValues({ appProcessId: data?.id }));
+      // dispatch(clearAllValues());
       dispatch(changeStepNumber(2));
     },
     onError: (error) => {
