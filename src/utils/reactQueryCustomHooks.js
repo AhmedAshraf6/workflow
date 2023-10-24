@@ -257,10 +257,12 @@ export const useCreateApplicationProcessInstanceInputs = () => {
     mutate: createApplicationProcessInstanceInputs,
     isLoading: isLoadingApplicationProcessInstanceInputs,
   } = useMutation({
-    mutationFn: async ({ processinstancesid, statusTypeId, submittedForm }) => {
-      console.log(processinstancesid);
-      console.log(statusTypeId);
-      console.log(submittedForm);
+    mutationFn: async ({
+      processinstancesid,
+      statusTypeId,
+      submittedForm,
+      handleToggle,
+    }) => {
       const { data } = await customFetch.post(
         '/ApplicationProcessInstanceInputs',
         {
@@ -269,10 +271,10 @@ export const useCreateApplicationProcessInstanceInputs = () => {
           formUserInputs: submittedForm,
         }
       );
+      handleToggle && handleToggle();
       return data;
     },
     onSuccess: (data) => {
-      console.log(data);
       queryClient.invalidateQueries({ queryKey: ['get_input_requests'] });
       toast.success('added successfully');
     },
