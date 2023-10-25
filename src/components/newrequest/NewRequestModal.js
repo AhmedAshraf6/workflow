@@ -54,7 +54,7 @@ export default function NewRequestModal({ open, handleToggle }) {
     queryKey: ['get_input_requests_for_start', currentStepId],
     queryFn: async () => {
       const data = await customFetch(
-        `/ApplicationProcessInstanceSteps/ByStepTypeId/${2}`
+        `/ApplicationProcessInstanceSteps/ByStepTypeId/${3}`
       );
       return { data };
     },
