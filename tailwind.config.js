@@ -18,6 +18,9 @@ module.exports = {
     // },
   },
   plugins: [require('@tailwindcss/typography'), require('daisyui')],
+  daisyui: {
+    themes: ['light'],
+  },
 };
 // dashboard page background
 // #f0f4f8
