@@ -18,7 +18,7 @@ export default function NewRequestModal({ open, handleToggle }) {
     queryKey: ['all_apps_process_instancess'],
     queryFn: async () => {
       const { data } = await customFetch(
-        '/ApplicationProcesses?IsDraft=false&pageNumber=2'
+        '/ApplicationProcesses?IsDraft=false&pageNumber=3'
       );
       return data;
     },
@@ -54,7 +54,7 @@ export default function NewRequestModal({ open, handleToggle }) {
     queryKey: ['get_input_requests_for_start', currentStepId],
     queryFn: async () => {
       const data = await customFetch(
-        `/ApplicationProcessInstanceSteps/ByStepTypeId/${3}`
+        `/ApplicationProcessInstanceSteps/ByStepTypeId/${2}`
       );
       return { data };
     },
