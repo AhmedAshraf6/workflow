@@ -70,11 +70,11 @@ export default function CreateSteps() {
       </div>
 
       <DefaultStep />
-      <div className='allSteps'>
+      <ul className='allSteps'>
         {workflowLevels?.map((workflow) => {
           return <Step key={workflow.sortOrder} workflow={workflow} />;
         })}
-      </div>
+      </ul>
       <AddStepType />
 
       <div className='rounded-full bg-white w-[30px] h-[30px] flex justify-center items-center'>

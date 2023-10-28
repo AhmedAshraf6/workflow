@@ -9,7 +9,6 @@ import { useSelector } from 'react-redux';
 
 import { useDispatch } from 'react-redux';
 import StartNewRequest from '../../components/newrequest/StartNewRequest';
-import SidebarInput from '../../components/createApp/createForm/SidebarInput';
 
 const SharedLayout = () => {
   const { isSidebarOpen } = useSelector((store) => store.user);
@@ -18,7 +17,6 @@ const SharedLayout = () => {
   return (
     <main className='h-screen '>
       <SmallSidebar />
-      <SidebarInput />
       <div className='grid grid-cols-5 '>
         <BigSidebar />
         <div

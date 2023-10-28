@@ -253,6 +253,7 @@ export const useCreatePermissions = () => {
 export const useCreateApplicationProcessInstanceInputs = () => {
   const dispatch = useDispatch();
   const queryClient = useQueryClient();
+  const navigate = useNavigate();
   const {
     mutate: createApplicationProcessInstanceInputs,
     isLoading: isLoadingApplicationProcessInstanceInputs,
@@ -277,6 +278,7 @@ export const useCreateApplicationProcessInstanceInputs = () => {
     onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: ['get_input_requests'] });
       toast.success('added successfully');
+      navigate('/');
     },
     onError: (error) => {
       checkForUnauthorizedResponse(error, dispatch);

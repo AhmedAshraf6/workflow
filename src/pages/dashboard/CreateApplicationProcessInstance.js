@@ -53,7 +53,11 @@ const CreateApplicationProcessInstance = () => {
   //   (statustype) => statustype.name === 'Rejected'
   // );
   console.log(singleAppProcessById);
-  if (isLoadingFields || isLoadingSingleAppProcess) {
+  if (
+    isLoadingFields ||
+    isLoadingSingleAppProcess ||
+    isLoadingApplicationProcessInstanceInputs
+  ) {
     //isLoadingStatusType
     return <Loading />;
   }
@@ -88,6 +92,7 @@ const CreateApplicationProcessInstance = () => {
       submittedForm,
     });
   };
+
   // console.log(singleAppProcessById);
   // console.log(fieldsTypesProcess);
   // console.log(statusType);
@@ -97,44 +102,59 @@ const CreateApplicationProcessInstance = () => {
     <form className='bg-base-100 rounded-lg py-5' onSubmit={handleSubmit}>
       {singleAppProcessById?.formWithPermissions?.sections?.map((section) => {
         return (
-          <section
-            key={section.id}
-            className=' border-b-2 border-base-300 pb-5 sm:pb-8 mx-2 sm:mx-5'
-          >
-            <h2 className='text-lg sm:text-2xl font-semibold'>
-              {section.name}
-            </h2>
-            <div className='flex flex-col gap-y-5 sm:gap-y-7 mt-3 sm:mt-5 w-full sm:w-[50%] px-3 sm:px-5'>
-              {section?.fields?.map((field) => {
-                const {
-                  id,
-                  name: fieldName,
-                  fieldTypeId,
-                  isRequired,
-                  permissionType,
-                  value,
-                } = field;
-                const tag = fieldsTypesProcess?.find(
-                  (option) => option.id === fieldTypeId
-                );
-                return (
-                  <div key={id}>
-                    {permissionType?.name !== 'Hidden' && (
-                      <FormRow
-                        name={id}
-                        labelText={fieldName}
-                        isrequired={isRequired}
-                        type={tag?.tagAttributes[0]?.value}
-                        key={id}
-                        readonly={permissionType?.name === 'Readonly' && true}
-                        handleChange={handleChange}
-                      />
-                    )}
-                  </div>
-                );
-              })}
-            </div>
-          </section>
+          <>
+            {section?.fields?.map((field) => {
+              return (
+                <>
+                  {field.permissionType.name == 'Readonly' ||
+                    (field.permissionType.name === 'Editable' && (
+                      <section
+                        key={section.id}
+                        className=' border-b-2 border-base-300 pb-5 sm:pb-8 mx-2 sm:mx-5'
+                      >
+                        <h2 className='text-lg sm:text-2xl font-semibold'>
+                          {section.name}
+                        </h2>
+
+                        <div className='flex flex-col gap-y-5 sm:gap-y-7 mt-3 sm:mt-5 w-full sm:w-[50%] px-3 sm:px-5'>
+                          {section?.fields?.map((field) => {
+                            const {
+                              id,
+                              name: fieldName,
+                              fieldTypeId,
+                              isRequired,
+                              permissionType,
+                              value,
+                            } = field;
+                            const tag = fieldsTypesProcess?.find(
+                              (option) => option.id === fieldTypeId
+                            );
+                            return (
+                              <div key={id}>
+                                {permissionType?.name !== 'Hidden' && (
+                                  <FormRow
+                                    name={id}
+                                    labelText={fieldName}
+                                    isrequired={isRequired}
+                                    type={tag?.tagAttributes[0]?.value}
+                                    key={id}
+                                    readonly={
+                                      permissionType?.name === 'Readonly' &&
+                                      true
+                                    }
+                                    handleChange={handleChange}
+                                  />
+                                )}
+                              </div>
+                            );
+                          })}
+                        </div>
+                      </section>
+                    ))}
+                </>
+              );
+            })}
+          </>
         );
       })}
       {/* fields */}
@@ -171,9 +191,6 @@ const CreateApplicationProcessInstance = () => {
         </div>
       </div>
       <div className='text-center '>
-        <button type='button' className='btn btn-error mx-2'>
-          Rejected
-        </button>
         <button type='submit' className='btn btn-primary mx-2'>
           {typeaction}
         </button>
