@@ -8,7 +8,7 @@ import {
 
 const initialState = {
   isSidebarOpen: false,
-  user: getUserFromLocalStorage(),
+  user: 'data',
 };
 
 export const clearStore = createAsyncThunk(
